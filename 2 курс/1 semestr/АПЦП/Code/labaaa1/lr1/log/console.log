@@ -1,0 +1,172 @@
+# Design: Design lr1 already active.
+# 
+# DESIGN: Default Design Language: VHDL
+# DESIGN: Default BDE Language: VHDL
+# DESIGN: C-Synthesis: Not Defined
+# DESIGN: HDL Synthesis: Not Defined
+# DESIGN: Physical Synthesis: Not Defined
+# DESIGN: Implementation: Not Defined
+acom -reorder -O3 -work lr1 -2002  $dsn/src/sm.asf
+# Compile with File Reorder...
+# Loading State Diagram data...
+# Generating c:\My_Designs\labaaa1\lr1\compile\sm.vhd from c:\My_Designs\labaaa1\lr1\src\sm.asf
+# Synthesis attributes will be generated for Synopsys FPGA Express
+# Warning: FSM2HDL_4028 sm.asf : Attribute ENUM_ENCODING is not supported for Symbolic encoding.
+# Generating interface file...
+# HDL code generation completed. 0 error(s), 1 warning(s)
+# Double-click on error/warning line to see the source of error/warning.
+# Warning: DAGGEN_0523: The source is compiled without the -dbg switch. Line breakpoints, code coverage, and assertion debug will not be available.
+# File: .\sm.vhd
+# Compile Entity "sm"
+# Compile Architecture "sm_arch" of Entity "sm"
+# Top-level unit(s) detected:
+# Entity => sm
+# Compile success 0 Errors 0 Warnings  Analysis time :  0.3 [s]
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+asim -O5 +access +r +m+sm sm sm_arch
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: Elaboration final pass complete - time: 0.1 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 5749 kB (elbread=1023 elab2=4635 kernel=90 sdf=0)
+# KERNEL: ASDB file was created in location c:\My_Designs\labaaa1\lr1\src\wave.asdb
+#  13:07, 11 сент€бр€ 2017 г.
+#  Simulation has been initialized
+#  Selected Top-Level: sm (sm_arch)
+run
+# KERNEL: Simulation has finished. There are no more test vectors to simulate.
+run
+# KERNEL: Simulation has finished. There are no more test vectors to simulate.
+acom -O3 -work lr1 -2002  $dsn/src/sm.asf
+# Compile...
+# Warning: DAGGEN_0523: The source is compiled without the -dbg switch. Line breakpoints, code coverage, and assertion debug will not be available.
+# File: .\sm.vhd
+# Compile Entity "sm"
+# Compile Architecture "sm_arch" of Entity "sm"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]
+# There are no files to simulate. Use "Functional Simulation Options" dialog to specify file(s).
+# There are no files to simulate. Use "Functional Simulation Options" dialog to specify file(s).
+# Top-level unit has not been specified for simulation. Use "Functional Simulation Options" dialog to specify top-level.
+# Top-level unit has not been specified for simulation. Use "Functional Simulation Options" dialog to specify top-level.
+asim +access +r -advdataflow sm
+# Warning: Verilog Optimization cannot be used when -advdataflow is in effect. Verilog Optimization disabled.
+#  Simulation has been stopped
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 5749 kB (elbread=1023 elab2=4635 kernel=90 sdf=0)
+# KERNEL: ASDB file was created in location c:\My_Designs\labaaa1\lr1\src\wave.asdb
+#  13:16, 11 сент€бр€ 2017 г.
+#  Simulation has been initialized
+#  Selected Top-Level: sm (sm_arch)
+endsim
+#  Simulation has been stopped
+asim -O5 +access +r +m+sm sm sm_arch
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 5749 kB (elbread=1023 elab2=4635 kernel=90 sdf=0)
+# KERNEL: ASDB file was created in location c:\My_Designs\labaaa1\lr1\src\wave.asdb
+#  13:18, 11 сент€бр€ 2017 г.
+#  Simulation has been initialized
+#  Selected Top-Level: sm (sm_arch)
+# 6 signal(s) traced.
+run 100 ns
+# KERNEL: stopped at time: 100 ns
+# KERNEL: Simulation has finished. There are no more test vectors to simulate.
+# force -freeze /sm/R 0
+# force -freeze /sm/S 0
+# force -freeze /sm/R 1
+run 100 ns
+# KERNEL: stopped at time: 200 ns
+# KERNEL: Simulation has finished. There are no more test vectors to simulate.
+# force -freeze /sm/R 0
+# force -freeze /sm/R 1
+# force -freeze /sm/R 0
+# force -freeze /sm/R 1
+# force -freeze /sm/R 0
+# force -freeze /sm/S 1
+#  Simulation has been stopped
+# Design: Error: There are no modules selected for elaboration.
+# Design: Error: Elaboration failed
+# Design: Design lr1 already active.
+# 
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+asim -O5 +access +r +m+sm sm sm_arch
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+# asim: Stack memory: 32MB
+# asim: Retval memory: 32MB
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Elaboration final pass...
+# ELAB2: Create instances ...
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: Elaboration final pass complete - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 5749 kB (elbread=1023 elab2=4635 kernel=90 sdf=0)
+# KERNEL: ASDB file was created in location c:\My_Designs\labaaa1\lr1\src\wave.asdb
+#  13:30, 11 сент€бр€ 2017 г.
+#  Simulation has been initialized
+#  Selected Top-Level: sm (sm_arch)
+run
+# KERNEL: Simulation has finished. There are no more test vectors to simulate.
+acom -O3 -work lr1 -2002  $dsn/src/sm.asf
+# Compile...
+# Warning: DAGGEN_0523: The source is compiled without the -dbg switch. Line breakpoints, code coverage, and assertion debug will not be available.
+# File: .\sm.vhd
+# Compile Entity "sm"
+# Compile Architecture "sm_arch" of Entity "sm"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]
+endsim
+#  Simulation has been stopped
+acom -O3 -work lr1 -2002  $dsn/src/sm.asf
+# Compile...
+# Warning: DAGGEN_0523: The source is compiled without the -dbg switch. Line breakpoints, code coverage, and assertion debug will not be available.
+# File: .\sm.vhd
+# Compile Entity "sm"
+# Compile Architecture "sm_arch" of Entity "sm"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]
+# Adding file c:\My_Designs\labaaa1\lr1\src\untitled.asdb ... Done
+# Adding file c:\My_Designs\labaaa1\lr1\src\untitled.awc ... Done

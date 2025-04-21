@@ -1,0 +1,92 @@
+unit UnitMain;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Opengl, Vcl.ExtCtrls;
+
+type
+  TFormMain = class(TForm)
+    PaintBox1: TPaintBox;
+    procedure PaintBox1Paint(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    hrc: HGLRC;
+  end;
+
+var
+  FormMain: TFormMain;
+
+implementation
+
+{$R *.dfm}
+
+procedure SetDCPixelFormat(hdc: HDC);
+var pfd: TPixelFormatDescriptor;
+nPixelFormat: integer;
+begin
+FillChar (pfd, SizeOf(pfd), 0);
+nPixelFormat:=ChoosePixelFormat(hdc, @pfd);
+SetPixelFormat(hdc, nPixelFormat, @pfd);
+end;
+
+
+procedure TFormMain.FormCreate(Sender: TObject);
+begin
+  SetDCPixelFormat(Canvas.Handle);
+  hrc:=wglCreateContext(Canvas.Handle);
+end;
+
+procedure TFormMain.FormDestroy(Sender: TObject);
+begin
+  wglDeleteContext(hrc);
+end;
+
+procedure TFormMain.PaintBox1Paint(Sender: TObject);
+var n,i: integer;
+    x,y: Real;
+begin
+  {Обов’язкова команда}
+  wglMakeCurrent(Canvas.Handle, hrc);
+  {Встановлення кольору фону}
+  glClearColor(0.2, 0.5, 0.75, 1.0);
+  {Очистка екрана}
+  glClear(GL_COLOR_BUFFER_BIT);
+  {Встановлення кольору переднього плану}
+  glColor3d(0,0,0);
+
+  { Тут можна писати довільні команди Open GL для
+  формування графічних зображень}
+  glBegin(GL_LINES);
+    glVertex2d(0, -1); {Початок осі ординат}
+    glVertex2d(0, 1); {Кінець осі ординат}
+    glVertex2d(-1, -0); {Початок осі абсцис}
+    glVertex2d(1, 0); {Кінець осі абсцис}
+    glEnd;
+    {Виведення на екран графіка}
+    glLineWidth(3);
+    glColor3d(1,0,0); {Червоний колір переднього плану}
+    glBegin(GL_LINE_STRIP); {Початок ламаної лінії}
+    x:=-1; {Абсциса початкової точки}
+    repeat
+      y:=cos(10*x)/sin(3*x); {Ордината поточної точки}
+      glVertex2d(x, y); {Додавання поточної точки як вузла до ламаної лінії}
+      x:=x+0.01; {Зсув абсциси поточної точки}
+    until x>=0;
+    x:=0; {Абсциса початкової точки}
+    repeat
+      y:=cos(10*x)/sin(3*x); {Ордината поточної точки}
+      glVertex2d(x, y); {Додавання поточної точки як вузла до ламаної лінії}
+      x:=x+0.01; {Зсув абсциси поточної точки}
+    until x>=1;
+  glEnd; {Кінець ламаної лінії}
+
+  {Обов’язкова команда}
+  wglMakeCurrent(0,0);
+end;
+
+end.

@@ -1,0 +1,78 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  Caption = 'Microsoft Visual C++'
+  ClientHeight = 201
+  ClientWidth = 447
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = MenuBar
+  OldCreateOrder = False
+  Position = poDefault
+  PixelsPerInch = 96
+  TextHeight = 13
+  object MenuBar: TMainMenu
+    Left = 416
+    Top = 168
+    object F1: TMenuItem
+      Caption = 'File'
+    end
+    object Edit1: TMenuItem
+      Caption = 'Edit'
+    end
+    object View1: TMenuItem
+      Caption = 'View'
+    end
+    object Insert1: TMenuItem
+      Caption = 'Insert'
+    end
+    object Project1: TMenuItem
+      Caption = 'Project'
+      object SetActiveProject1: TMenuItem
+        Caption = 'Set Active Project'
+        object ProjectMain1: TMenuItem
+          Caption = 'ProjectMain'
+          Checked = True
+        end
+      end
+      object AddtoProject1: TMenuItem
+        Caption = 'Add To Project'
+        object New1: TMenuItem
+          Caption = 'New...'
+        end
+        object NewFolder1: TMenuItem
+          Caption = 'New Folder...'
+        end
+        object Files1: TMenuItem
+          Caption = 'Files...'
+        end
+        object DataConnection1: TMenuItem
+          Caption = 'Data Connection...'
+        end
+      end
+      object Settings1: TMenuItem
+        Caption = 'Settings...'
+        ShortCut = 32886
+      end
+      object InsertProjectintoWorkspace1: TMenuItem
+        Caption = 'Insert Project into Workspace...'
+      end
+    end
+    object Build1: TMenuItem
+      Caption = 'Build'
+    end
+    object ools1: TMenuItem
+      Caption = 'Tools'
+    end
+    object Window1: TMenuItem
+      Caption = 'Window'
+    end
+    object Help41: TMenuItem
+      Caption = 'Help'
+    end
+  end
+end

@@ -1,0 +1,49 @@
+-------------------------------------------------------------------------------
+--
+-- Title       : Laba_2
+-- Design      : Laba_2_Decoder
+-- Author      : KSU
+-- Company     : NUOS
+--
+-------------------------------------------------------------------------------
+--
+-- File        : Laba_2.vhd
+-- Generated   : Mon Sep 18 13:28:35 2017
+-- From        : interface description file
+-- By          : Itf2Vhdl ver. 1.22
+--
+-------------------------------------------------------------------------------
+--
+-- Description :
+--
+-------------------------------------------------------------------------------
+ 
+--{{ Section below this comment is automatically maintained
+--   and may be overwritten
+--{entity {Laba_2} architecture {Laba_2}}
+ 
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+ 
+entity Laba_2 is
+     port(
+         Let_in_0 : in STD_LOGIC_VECTOR(3 downto 0);
+         Let_out_0 : out STD_LOGIC_VECTOR(7 downto 0));
+end Laba_2;
+ 
+--}} End of automatically maintained section
+ 
+architecture Laba_2 of Laba_2 is
+     -- enter your statements here --  
+    begin
+      Let_out_0<="11101110" when Let_in_0="0000" else
+      "01001000" when Let_in_0="0001" else
+      "10110110" when Let_in_0="0011" else       
+      "11011010" when Let_in_0="0100" else
+      "01011100" when Let_in_0="0101" else   
+      "11110110" when Let_in_0="0110" else
+      "01001010" when Let_in_0="0111" else
+      "11111110" when Let_in_0="1000" else
+      "11011110" when Let_in_0="1001" else
+      "00000000";
+    end;

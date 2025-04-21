@@ -1,0 +1,1 @@
+-w -s "c:\My_Designs\LR_04\library.cfg"  -j "c:\My_Designs\LR_04\DLR_04\projlib.cfg"  -d "c:\My_Designs\LR_04\DLR_04\compile"   -work DLR_04  -O3 -e 100 -2002 "c:\My_Designs\LR_04\DLR_04\src\registr_p.vhd"

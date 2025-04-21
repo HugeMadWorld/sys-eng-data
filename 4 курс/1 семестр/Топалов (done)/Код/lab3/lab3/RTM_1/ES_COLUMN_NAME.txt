@@ -1,0 +1,136 @@
+Name
+I
+II
+III
+ES Time
+ES Number
+PC - ES
+Reading Time
+Err open
+Err read
+angleU
+dU
+kP
+I
+U
+frq
+Pe
+Pi
+Qe
+Qi
+dt
+Phase sts
+enable
+ P 
+ Q 
+ S 
+ L 
+I^U
+=
+( + )
+dt read
+few sts
+Link ev
+f-kp ev
+power ev
+amper ev
+volts ev
+unit sts ev
+delta abs
+delta rel
+EA+
+EA-
+EQ+
+EQ-
+tarif
+total
+month
+day
+;48
+;49
+;50
+;51
+;52
+;53
+;54
+;55
+;56
+;57
+;58
+;59
+;60
+;61
+;62
+;63
+;64
+;65
+;66
+;67
+;68
+;69
+V_Name
+code
+comment
+DT
+TOTAL
+;75
+;76
+;77
+;78
+;79
+IP-Addr
+Unit-Addr
+Status
+T_Connect
+WSA Conn err
+T_Exchange
+WSA Exchange err
+Unit err
+Err Count
+Speed
+No Connect
+Connecting...
+Connected
+Connected,unwork
+Connected,test
+Disconnect,timeout
+Wrong Connect
+Disable
+Disconnect,error
+Exchange Err
+number
+sts
+code err
+time err
+modem step
+modem err
+all error
+zero read
+speed
+one speed
+TM6
+System
+All Channels
+tm6_log
+;114
+Process
+;116
+;117
+COM port
+TCP Unit
+ES Meter
+Status
+Energy Few
+I and U
+Power
+Average Power
+Archieve Energy
+;127
+%.2f
+%.3f
+%.2f
+%.2f
+%.2f
+%.2f
+%g
+%g

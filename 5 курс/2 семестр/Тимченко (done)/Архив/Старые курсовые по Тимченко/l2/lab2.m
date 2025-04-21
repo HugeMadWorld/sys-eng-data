@@ -1,0 +1,112 @@
+clear all
+% Vx = 5;
+Vy = 0;
+psiZ = 0.035; %рад
+q21=-0.0341;
+q31=0.000232;
+r21 = 0.465;
+r31=-0.0109;
+s21=0.00194;
+s31=0.000189;
+k1 = -1.5;
+k11 = -0.5;
+k12 = 0.3;
+k2 = 0.20;
+k3 = 0.3;
+dt = 1;
+del_t = 1;
+%psi(i)=psiZ
+%начальные условия
+w(1) = 0.001;
+b(1) = 0.0000000000006;
+a(1) = 0.0000000000004;
+
+a1(1) = 0.0000000000004;
+a2(1) = 0.0000000000004;
+
+fi_c(1) = 0.0000000001;
+psi(1) = 0.00000000003;
+Vx(1) = 0;
+Vy(1) = 0;
+X(1) = 0;
+Y(1) = 0;
+n = 500;
+% Vx = 5;
+V = 5;
+
+%П-регулятор
+
+for i = 2:dt:n-1;
+b(i) = b(i-1) + (r21*w(i-1)+q21*b(i-1)+s21*Vx(i-1)*a(i-1))*del_t
+w(i) = w(i-1) + (r31*w(i-1)+q31*Vx(i-1)*b(i-1)+s31*((Vx(i-1)^2)*a(i-1)))*del_t
+psi(i) = psi(i-1)+w(i-1)*del_t
+fi_c(i) = fi_c(i-1)+(psi(i)-psi(i-1))-(b(i)-b(i-1))
+Vx(i) = V*sin(fi_c(i-1))
+Vy(i) = V*cos(fi_c(i-1))
+X(i) = X(i-1)+Vx(i-1)*dt
+Y(i) = Y(i-1)+Vy(i-1)*dt
+
+a(i) = (b(i)-b(i-1))*k1+(w(i)-w(i-1))*k11 + (Y(i)-Y(i-1))*k12
+
+
+
+end
+
+i=2:dt:n;
+figure(1)
+SUBPLOT(2,2,1); plot(i,b); grid; title('ygol drejfa');
+SUBPLOT(2,2,2); plot(i,w); grid; title('yglova shvidkist');
+SUBPLOT(2,2,3); plot(i,psi); grid; title('ygol kursa');
+SUBPLOT(2,2,4); plot(i,a); grid; title('ygol perekladki rulja');
+figure(2)
+plot(X,Y)
+%ПД
+for i = 2:dt:n-1;
+b(i) = b(i-1) + (r21*w(i-1)+q21*b(i-1)+s21*Vx(i-1)*a1(i-1))*del_t
+w(i) = w(i-1) + (r31*w(i-1)+q31*Vx(i-1)*b(i-1)+s31*((Vx(i-1)^2)*a1(i-1)))*del_t
+psi(i) = psi(i-1)+w(i-1)*del_t
+fi_c(i) = fi_c(i-1)+(psi(i)-psi(i-1))-(b(i)-b(i-1))
+Vx(i) = V*sin(fi_c(i-1))
+Vy(i) = V*cos(fi_c(i-1))
+
+a1(i) = (b(i)-b(i-1))*k1+((b(i)-b(i-1))/del_t)*k2
+
+
+X(i) = X(i-1)+Vx(i-1)*dt
+Y(i) = Y(i-1)+Vy(i-1)*dt
+end
+
+i=2:dt:n;
+figure(3)
+SUBPLOT(2,2,1); plot(i,b,'.'); grid; hold on; title('ygol drejfa');
+SUBPLOT(2,2,2); plot(i,w,'.'); grid; hold on; title('yglova shvidkist');
+SUBPLOT(2,2,3); plot(i,psi,'.'); hold on; grid; title('ygol kursa');
+SUBPLOT(2,2,4); plot(i,a1,'.'); grid; hold on; title('ygol perekladki rulja');
+figure(4)
+plot(X,Y)
+
+
+%ПІД-регулятор
+for i = 2:dt:n-1;
+b(i) = b(i-1) + (r21*w(i-1)+q21*b(i-1)+s21*Vx(i-1)*a2(i-1))*del_t
+w(i) = w(i-1) + (r31*w(i-1)+q31*Vx(i-1)*b(i-1)+s31*((Vx(i-1)^2)*a2(i-1)))*del_t
+psi(i) = psi(i-1)+w(i-1)*del_t
+fi_c(i) = fi_c(i-1)+(psi(i)-psi(i-1))-(b(i)-b(i-1))
+Vx(i) = V*sin(fi_c(i-1))
+Vy(i) = V*cos(fi_c(i-1))
+
+a2(i) = (psi(i)-psi(i-1))*k1 + ((psi(i)-psi(i-1))/del_t)*k2 + (sum(psi(i)-psi(i-1))*del_t)*k3
+
+
+X(i) = X(i-1)+Vx(i-1)*dt
+Y(i) = Y(i-1)+Vy(i-1)*dt
+end
+
+i=2:dt:n;
+figure(5)
+SUBPLOT(2,2,1); plot(i,b); grid; title('ygol drejfa');
+SUBPLOT(2,2,2); plot(i,w); grid; title('yglova shvidkist');
+SUBPLOT(2,2,3); plot(i,psi); grid; title('ygol kursa');
+SUBPLOT(2,2,4); plot(i,a2); grid; title('ygol perekladki rulja');
+figure(6)
+plot(X,Y)

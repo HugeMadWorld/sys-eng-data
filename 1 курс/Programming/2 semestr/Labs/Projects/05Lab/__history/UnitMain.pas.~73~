@@ -1,0 +1,73 @@
+unit UnitMain;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Menus;
+
+type
+  TFormMain = class(TForm)
+    BttnEdit: TButton;
+    MnuBar: TMainMenu;
+    MnuFile: TMenuItem;
+    MnuEdit: TMenuItem;
+    MnuExit: TMenuItem;
+    MnuInfo: TMenuItem;
+    MnuAbout: TMenuItem;
+    MnuClear: TMenuItem;
+    MemoInput: TMemo;
+    Label1: TLabel;
+    procedure MnuExitClick(Sender: TObject);
+    procedure MnuClearClick(Sender: TObject);
+    procedure MnuAboutClick(Sender: TObject);
+    procedure BttnEditClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormMain: TFormMain;
+
+implementation
+
+{$R *.dfm}
+
+procedure DeleteDublicates(Input:TMemo; Output:TLabel);
+var
+  i: integer;
+  k:TStringList;
+begin
+  k:=TStringList.Create;
+  k.Delimiter := ' ';
+  k.DelimitedText := Input.Text;
+  for i := k.Count - 1 downto 1 do
+    if k.Strings[i] = k.Strings[i-1] then
+      k.Delete(i);
+  Output.Caption:=k.DelimitedText;
+  k.Free;
+  end;
+
+procedure TFormMain.BttnEditClick(Sender: TObject);
+begin
+  DeleteDublicates(MemoInput, Label1);
+end;
+
+procedure TFormMain.MnuAboutClick(Sender: TObject);
+begin
+  Application.MessageBox('Программа для редактирования текста'+#13+#13+'Coded by Serge Ivanov'+#13+#13+'-Contacts-'+#13+'Email: serega.iv.1407@gmail.com', 'About Program');//Показ инфы о программе
+end;
+
+procedure TFormMain.MnuClearClick(Sender: TObject);
+begin
+  MemoInput.Clear;//Очистка окна ввода
+end;
+
+procedure TFormMain.MnuExitClick(Sender: TObject);
+begin
+  FormMain.Close;//Закрытие программы по команде
+end;
+
+end.

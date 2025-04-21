@@ -1,0 +1,64 @@
+unknown
+opening
+closing
+e:two end
+Open
+e:no open
+e:no close
+alr closing(by cmd)
+Close
+e:-open
+e:-close
+e:+open
+e:+close
+e:ext open
+e:ext close
+alr closing(no open)
+alr closing(ne otlip)
+alr closing(two end)
+alr closing(by value)
+Open:waite value s1
+Open:waite value s2
+auto closing
+
+
+unknown
+to ON
+to OFF
+@e:two end
+ON
+e:not ON
+e:not OFF
+alr closing(by cmd)
+OFF
+@e:-open
+@e:-close
+e:m not change
+e:m timeout
+e:ext on
+e:ext off
+alr off(not on)
+alr off(2?)
+alr off(3?)
+alr off(by value)
+ON:waite value s1
+ON:waite value s2
+to auto OFF
+
+bad condition
+;48
+;49
+;50
+;51
+;52
+;53
+;54
+;55
+;56
+;57
+;58
+;59
+;60
+;61
+;62
+;63

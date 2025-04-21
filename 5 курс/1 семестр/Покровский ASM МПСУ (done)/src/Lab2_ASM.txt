@@ -1,0 +1,158 @@
+/*
+ * Pokrovskiy_Lab2_end.asm
+ *
+ *  Created: 23.09.2020 12:43:34
+ *  Author: student
+ *	Тема: измерение временных параметров сигналов
+ *	*** Задание ***
+ *	1) Необходимо измерить частоты двух дискретных сигналов в диапазоне от 10 Гц до 10кГц 
+ *	с точностью до 1 Гц.
+ *	2) Необходимо измерить время положительного испульса и период сигнала с ШИМ.
+ *	
+ *	Максимальное значение преиода может составлять 1мс;
+ *	Измерение необходимо производить с максимальной точностью.
+ *	Тактовая частота МК 8 МГц
+ *	*** *** *** ***
+ *	~
+ *	Таймер 1 с
+ *	Внешнее прерывание int0. int1 по назастающему фронту
+ *	~
+ */ 
+ .include "m16def.inc"
+ .def temp = R16
+ .equ CTC_VALUE = 31250
+ .def CHANNEL = R17
+ .def tempH = R18
+ .def CH0L = R20
+ .def CH0H = R21
+ .def CH1L = R22
+ .def CH1H = R23
+ .def CH2L = R24
+ .def CH2H = R25
+
+ jmp RESET ; Reset Handler
+ jmp EXT_INT0 ; IRQ0 Handler
+ jmp EXT_INT1 ; IRQ1 Handler
+ jmp TIM2_COMP ; Timer2 Compare Handler
+ jmp TIM2_OVF ; Timer2 Overflow Handler
+ jmp TIM1_CAPT ; Timer1 Capture Handler
+ jmp TIM1_COMPA ; Timer1 CompareA Handler
+ jmp TIM1_COMPB ; Timer1 CompareB Handler
+ jmp TIM1_OVF ; Timer1 Overflow Handler
+ jmp TIM0_OVF ; Timer0 Overflow Handler
+ jmp SPI_STC ; SPI Transfer Complete Handler
+ jmp USART_RXC ; USART RX Complete Handler
+ jmp USART_UDRE ; UDR Empty Handler
+ jmp USART_TXC ; USART TX Complete Handler
+ jmp ADC_C ; ADC Conversion Complete Handler
+ jmp EE_RDY ; EEPROM Ready Handler
+ jmp ANA_COMP ; Analog Comparator Handler
+ jmp TWSI ; Two-wire Serial Interface Handler
+ jmp EXT_INT2 ; IRQ2 Handler
+ jmp TIM0_COMP ; Timer0 Compare Handler
+ jmp SPM_RDY ; Store Program Memory Ready Handler
+;
+
+ RESET: 
+ ldi temp,high(RAMEND) ; Main program start
+ out SPH,temp ; Set Stack Pointer to top of RAM
+ ldi temp,low(RAMEND)
+ out SPL,temp
+
+ ; Define pull-ups and set outputs high
+ ; Define directions for port pins
+ ldi temp,(0<<PB0)|(0<<PB1)|(0<<PB2)
+ out PORTB,temp
+ ldi temp,(1<<DDB0)|(1<<DDB1)|(1<<DDB2)
+ out DDRB,temp
+ ; Define ADC
+ ldi temp,(0<<MUX4)|(0<<MUX3)|(0<<MUX2)|(0<<MUX1)|(0<<MUX0)|(0<<ADLAR)|(0<<REFS1)|(0<<REFS0)|(1<<DDB2)
+ out ADMUX,temp
+ ldi temp,(1<<ADEN)|(1<<ADSC)|(0<<ADATE)|(1<<ADIE)|(1<<ADPS2)|(1<<ADPS1)|(0<<ADPS0)
+ out ADCSRA,temp
+ ; Define Timer (sampling time 1s)
+ ldi temp,high(CTC_VALUE)
+ out OCR1AH,temp
+ ldi temp,low(CTC_VALUE)
+ out OCR1AL,temp
+
+ ldi temp,(0<<WGM11)|(0<<WGM10)
+ out TCCR1A,temp
+ ldi temp,(0<<WGM13)|(1<<WGM12)|(1<<CS12)|(0<<CS11)|(0<<CS10)
+ out TCCR1B,temp
+ ; start from 0 channel
+ ldi CHANNEL,0
+ clr CH0L
+ clr CH0H
+ clr CH1L
+ clr CH1H
+ clr CH2L
+ clr CH2H
+
+ sei ; Enable interrupts
+
+ LOOP: 
+ rjmp LOOP
+
+ ADC_C: ; ADC Conversion Complete Handler
+ in temp,ADCL; from ADC to Core
+ in tempH,ADCH
+ cpi CHANNEL,0
+ breq CH0
+ cpi CHANNEL,1
+ breq CH1
+ cpi CHANNEL,2
+ breq CH2
+ CHANGE_CH:
+ inc CHANNEL
+ cpi CHANNEL,3
+ breq END_ADC
+ out ADMUX,CHANNEL
+ ldi temp,(1<<ADEN)|(1<<ADSC)|(0<<ADATE)|(1<<ADIE)|(1<<ADPS2)|(1<<ADPS1)|(0<<ADPS0)
+ out ADCSRA,temp
+ END_ADC:
+ reti
+
+ CH0:
+ add CH0L,temp
+ adc CH0H,tempH ; Add with Carry
+ lsr CH0H 
+ ror CH0L ; Rotate Right Through Carry
+ rjmp CHANGE_CH
+ CH1:
+ add CH1L,temp
+ adc CH1H,tempH ; Add with Carry
+ lsr CH1H 
+ ror CH1L ; Rotate Right Through Carry
+ rjmp CHANGE_CH
+ CH2:
+ add CH2L,temp
+ adc CH2H,tempH ; Add with Carry
+ lsr CH2H 
+ ror CH2L ; Rotate Right Through Carry
+ rjmp CHANGE_CH
+
+ TIM1_COMPA: ; Timer1 CompareA Handler
+
+ reti
+
+ EXT_INT0: ; IRQ0 Handler
+ EXT_INT1: ; IRQ1 Handler
+ TIM2_COMP: ; Timer2 Compare Handler
+ TIM2_OVF: ; Timer2 Overflow Handler
+ TIM1_CAPT: ; Timer1 Capture Handler
+ TIM1_COMPB: ; Timer1 CompareB Handler
+ TIM1_OVF: ; Timer1 Overflow Handler
+ TIM0_OVF: ; Timer0 Overflow Handler
+ SPI_STC: ; SPI Transfer Complete Handler
+ USART_RXC: ; USART RX Complete Handler
+ USART_UDRE: ; UDR Empty Handler
+ USART_TXC: ; USART TX Complete Handler
+
+ EE_RDY: ; EEPROM Ready Handler
+ ANA_COMP: ; Analog Comparator Handler
+ TWSI: ; Two-wire Serial Interface Handler
+ EXT_INT2: ; IRQ2 Handler
+ TIM0_COMP: ; Timer0 Compare Handler
+ SPM_RDY:; Store Program Memory Ready Handler
+ reti

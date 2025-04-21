@@ -1,0 +1,85 @@
+unit UnitMain;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Imaging.jpeg, Vcl.ExtCtrls,
+  Vcl.StdCtrls;
+
+type
+  TFormMain = class(TForm)
+    BtnAbout: TButton;
+    EditSpeed: TEdit;
+    EditCoef: TEdit;
+    EditDist: TEdit;
+    ImgBG: TImage;
+    LblSpeed: TLabel;
+    LblDist: TLabel;
+    LblCoef: TLabel;
+    BttnCalc: TButton;
+    procedure BtnAboutClick(Sender: TObject);
+    procedure BttnCalcClick(Sender: TObject);
+    procedure EditSpeedExit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormMain: TFormMain;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormMain.BtnAboutClick(Sender: TObject);
+begin
+   Application.MessageBox('Coded by Serge Ivanov', 'About Program');
+
+end;
+
+procedure TFormMain.BttnCalcClick(Sender: TObject);
+Const
+   g=9.8;
+   C=3.6;
+
+Var
+   l,S,k,V:single;
+
+begin
+   l:=StrtoFloat(EditSpeed.Text);
+   k:=StrtoFloat(
+   EditCoef.Text);
+   V:=l/C;
+   S:=sqr(V)/(2*g*k);
+   EditDist.Text:=FloatToStr(S);
+end;
+
+procedure TFormMain.EditSpeedExit(Sender: TObject);
+   const
+   min=0.1;
+   max=120;
+   var
+   s:string; l:single; p,code:integer;
+begin
+   s:=EditSpeed.Text;
+   P:=Pos(',',s);
+   if p>0 then s[p]:='.';
+   val(s,l,code);
+   if code<>0 then begin
+     ShowMessage('EnterNumber');
+     EditSpeed.SetFocus;
+     exit;
+   end;
+   if (l<min) or (l>max) then begin
+     ShowMessage(FloatToStrF(min,fffixed,3,1)+'<Speed<'+FloatToStrF(max,fffixed,3,1));
+     EditSpeed.SetFocus;
+     Exit;
+   end;
+    s:=EditSpeed.Text;
+   s:=StringReplace(s, '.', ',', [rfReplaceAll]);
+   EditSpeed.Text:=s;
+   end;
+end.

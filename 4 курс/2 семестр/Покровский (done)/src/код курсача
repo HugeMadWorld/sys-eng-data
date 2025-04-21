@@ -1,0 +1,127 @@
+#include <SoftwareSerial.h> //підключаем бібліотеку для програмного Rx Tx
+SoftwareSerial mySerial(2, 3); // RX, TX
+
+//бібліотеки для роботи з смс і дзвінками
+#include "sms.h"
+#include "call.h"
+
+//об'єкти класу для роботи з смс і дзвінками
+SMSGSM sms;
+CallGSM call;
+
+int onoff=0;//чи ввімкнена сигналізація
+
+const int buzzer = 8; //пін для зумера
+int Door_sensor = 9; // пін датчика двері
+int Door_val = 0; // змінна для зберігання стану датчика двері
+int Motion_sensor = 10; //  пін датчика руху
+int Motion_val = 0; // змінна для зберігання стану датчика руху
+int resetgsm = 11;// Объявляем пин для resetgsm
+
+char smsbuffer[160];//cмс буфер для зберігання смс
+char n[20];//змінна для зберігання номера
+String number = "+380931075235";
+String smsRecieved = "";
+String input_string = "";
+char sirena[] = "ZAFIKSOVANO RUKH!";
+char PowerOFF[] = "ZNIATO Z OKHORONY!";
+char smsDv[] ="UVAHA! DVERI VIDKRITI!";
+char smsW[] ="POSTANOVKA NA OKHORONU!";
+char unread;
+char sendsms[160];
+
+void setup() 
+{
+  Serial.begin(115200); //швидкість порта
+  Serial.println("Initializing...");  
+  mySerial.begin(115200);
+  delay(2000);  //час на ініціалізацію модуля
+  
+  while(1)// безкінечний цикл
+  { 
+    mySerial.println("AT");//  чи є відповідь від модема
+	delay(1000);
+	if (!mySerial.find("OK"))// якщо ні - ресет
+	{
+		digitalWrite(resetgsm, HIGH);            
+		delay(1000);
+		digitalWrite(resetgsm, LOW);
+		delay(5000);
+	}
+    break;
+  }
+    delay(2000);    // потрібно дочекатися включення модему і з'єднання з мережею
+    while(1)// чекаємо підключення модему до мережі
+  { 
+        mySerial.println("AT+COPS?");
+        if (mySerial.find("+COPS: 0")) break;
+  }
+  
+  mySerial.println("AT+CMGF=1"); //режим кодування СМС - звичайний (для англ.)
+  delay(100);
+  mySerial.println("AT+CSCS=\"GSM\""); //режим кодування тексту
+  delay(100);
+}
+ 
+void loop() 
+{
+  Door_val = digitalRead(Door_sensor); //зчитуємо значення з датчика відкриття дверей
+  if ((Door_val == LOW) && onoff==1)//Двері відчинені і сигналка вкл
+  {
+    tone(buzzer, 2780, 20000); // Сирена pin freq
+    number.toCharArray(n,20); //номер
+    sms.SendSMS(n, smsDv);  // Надсилаємо СМС про те, що двері відкриті
+    sms.DeleteSMS(1);
+    memset(n,0,20); 
+    char smsbuffer[160]="";
+  }
+  
+  Motion_val = digitalRead(Motion_sensor); //зчитуємо значення з датчика руху
+  if ((Motion_val == HIGH) && onoff==1) 
+  {
+    tone(buzzer, 2780, 20000); // Сирена pin freq
+    number.toCharArray(n,20); //номер
+    sms.SendSMS(n, sirena);            // Надсилаємо СМС про те, що є рух
+    sms.DeleteSMS(1);
+    memset(n,0,20);
+    char smsbuffer[160]="";
+  }
+  
+  unread = sms.IsSMSPresent(SMS_UNREAD); // перевіряємо непрочитані СМС
+    if (unread) 
+  {// якщо є непрочитані смс
+    getsms(); // отримуємо непрочитану СМС
+    if (input_string=="0") // Команда "0" - зняти з охорони
+    {
+      Serial.print("ZNIATO Z OKHORONY");
+      number.toCharArray(n,20);
+      sms.SendSMS(n, PowerOFF);
+      sms.DeleteSMS(1);
+      memset(n,0,20);
+      onoff=0;
+      input_string=""; 
+      char smsbuffer[160]="";
+      noTone(buzzer);
+    }
+    if (input_string=="1")// Команда "1" - Поставити на охорону
+    {
+      Serial.print("POSTANOVKA NA OKHORONU");
+      number.toCharArray(n,20);
+      sms.SendSMS(n, smsW);
+      sms.DeleteSMS(1);
+      memset(n,0,20); 
+      onoff=1; 
+      input_string="";
+      char smsbuffer[160]="";
+    }
+        
+    sms.DeleteSMS(unread); // видаляємо смс з сім карти
+    }
+
+ }
+
+ void getsms()
+{
+  sms.GetSMS(1,n,20,smsbuffer,160);
+  smsRecieved =String(smsbuffer);
+}

@@ -1,0 +1,46 @@
+unit UnitMain;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.AppEvnts, Vcl.Buttons,
+  Vcl.ExtCtrls;
+
+type
+  TFormMain = class(TForm)
+    Edit1: TEdit;
+    Label1: TLabel;
+    Button1: TButton;
+    Timer1: TTimer;
+    procedure Button1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Timer1Timer(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormMain: TFormMain;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormMain.Button1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  Application.MessageBox('Coded by Serge Ivanov'+#13+#13+'-Contacts-'+#13+'Email: serega.iv.1407@gmail.com', 'About Program');
+end;
+
+procedure TFormMain.Timer1Timer(Sender: TObject);
+
+var k:integer;
+begin
+  k:=Edit1.SelLength;
+  Label1.Caption:=IntToStr(k);
+end;
+
+end.

@@ -1,0 +1,254 @@
+/* Тема Разработка 32-битного сумматора Сумматор
+без стенда (почитать - понять что там проверяется в стенде) файл 27.pdf 
+Ниже приводится текст Verilog-программы, реализующий поведенческую модель сумматора [32]: */
+
+
+
+// ОПРЕДЕЛЕНИЯ КОНСТАНТ
+`define DEL 1 // Задержка распространения сигнала в
+// сумматоре. Нулевая задержка может
+// привести к проблемам.
+`define BITS 32 // Разрядность операндов сумматора
+
+// ГЛАВНЫЙ МОДУЛЬ
+module Adder(
+clk,
+a,
+b,
+reset_n,
+add_en,
+out,
+cout,
+valid);
+// ВХОДЫ
+input clk; // Тактирующий импульс
+input [`BITS-1:0] a; // Входной сигнал операнда A
+input [`BITS-1:0] b; // Входной сигнал операнда B
+input reset_n; // Срабатывающий по спаду
+// синхронный сигнал сброса
+input add_en; // Синхронный сигнал разрешения работы
+// ВЫХОДЫ
+output [`BITS-1:0] out; // Выход (сумма)
+output cout; // Переполнение выхода
+output valid; // Сигнал готовности выхода
+
+// ОБЪЯВЛЕНИЯ СИГНАЛОВ
+wire clk;
+wire [`BITS-1:0] a;
+wire [`BITS-1:0] b;
+wire reset_n;
+wire add_en;
+reg [`BITS-1:0] out;
+reg cout;
+reg valid;
+// ОСНОВНОЙ КОД
+// Отслеживание событий на сигнале reset_n
+always @(reset_n) begin
+
+//Если сигнал сброса установлен в 1, то отключить выходы от
+//непрерывного присваивания из следующего блока
+if (reset_n) begin
+deassign out;
+deassign cout;
+cout = 1’b0;
+out = `BITS’h0;
+end
+// Ожидание возрастания тактирующего сигнала
+@(posedge clk);
+// Если reset установлен в 0 в момент возрастания clk,
+// установить нули на выходе устройства (с задержкой `DEL)
+if (~reset_n) begin
+#`DEL
+assign cout = 1’b0;
+assign out = `BITS’h0;
+end
+end
+
+// Ожидание возрастания тактирующего сигнала
+always @(posedge clk) begin
+if (add_en)
+//Вычисление суммы с учетом бита переноса
+{cout, out} <= #`DEL a+b;
+// Выход становится корректным после сброса или суммирования
+valid <= #`DEL ~reset_n | add_en | valid;
+end
+endmodule // Конец модуля Adder
+
+
+//
+//
+/* Код уровня регистровых передач представлен ниже: */
+//
+//
+
+
+// ОПРЕДЕЛЕНИЯ КОНСТАНТ
+`define DEL 1 // Задержка распространения сигнала в
+// сумматоре. Нулевая задержка может
+// привести к проблемам.
+// ГЛАВНЫЙ МОДУЛЬ
+module Adder(
+clk,
+a,
+b,
+add_en,
+add_en,
+out,
+cout,
+valid);
+// ВХОДЫ
+input clk; //Тактирующий импульс
+input [31:0] a; //32-битный входной сигнал операнда A
+input [31:0] b; //32-битный входной сигнал операнда B
+input reset_n; // Срабатывающий по спаду
+// синхронный сигнал сброса
+input add_en; // Синхронный сигнал разрешения работы
+// ВЫХОДЫ
+output [31:0] out; // 32-битный выход (сумма)
+output cout; // Переполнение выхода
+output valid; // Сигнал готовности выхода
+// ОБЪЯВЛЕНИЯ СИГНАЛОВ
+wire clk;
+wire [31:0] a;
+wire [31:0] b;
+wire reset_n;
+wire add_en;
+wire [31:0] out;
+wire cout;
+wire valid;
+wire [7:0] cout4; // Сигналы переполнения выходов
+// 4-битных сумматоров
+reg [2:0] valid_cnt; // Счетчик, определяющий готовность
+// выходов
+// Операторы assign – модель потоков данных
+assign #`DEL cout = cout4[7];
+assign #`DEL valid = ~|valid_cnt;
+// Основной код
+// Включение восьми 4-битных сумматоров
+Adder_4bit Add0(
+.clk(clk),
+.a(a[3:0]),
+.b(b[3:0]),
+.cin(1’b0),
+.reset_n(reset_n),
+.add_en(add_en),
+.out(out[3:0]),
+.cout(cout4[0]));
+
+Adder_4bit Add1(
+.clk(clk),
+.a(a[7:4]),
+.b(b[7:4]),
+.cin(cout4[0]),
+.reset_n(reset_n),
+.add_en(add_en),
+.out(out[7:4]),
+.cout(cout4[1]));
+Adder_4bit Add2(
+.clk(clk),
+.a(a[11:8]),
+.b(b[11:8]),
+.cin(cout4[1]),
+.reset_n(reset_n),
+.add_en(add_en),
+.out(out[11:8]),
+.cout(cout4[2]));
+Adder_4bit Add3(
+.clk(clk),
+.a(a[15:12]),
+.b(b[15:12]),
+.cin(cout4[2]),
+.reset_n(reset_n),
+.add_en(add_en),
+.out(out[15:12]),
+.cout(cout4[3]));
+Adder_4bit Add4(
+.clk(clk),
+.a(a[19:16]),
+.b(b[19:16]),
+.cin(cout4[3]),
+.reset_n(reset_n),
+.add_en(add_en),
+.out(out[19:16]),
+.cout(cout4[4]));
+Adder_4bit Add5(
+.clk(clk),
+.a(a[23:20]),
+.b(b[23:20]),
+.cin(cout4[4]),
+.reset_n(reset_n),
+.add_en(add_en),
+.out(out[23:20]),
+.cout(cout4[5]));
+Adder_4bit Add6(
+.clk(clk),
+.a(a[27:24]),
+.b(b[27:24]),
+.cin(cout4[5]),
+.reset_n(reset_n),
+.add_en(add_en),
+.out(out[27:24]),
+.cout(cout4[6]));
+Adder_4bit Add7(
+.clk(clk),
+.a(a[31:28]),
+.b(b[31:28]),
+.cin(cout4[6]),
+.reset_n(reset_n),
+.add_en(add_en),
+.out(out[31:28]),
+.cout(cout4[7]));
+// Ожидание возрастания тактирующего сигнала
+always @(posedge clk) begin
+if (~reset_n) begin
+// Инициализировать счетчик valid_cnt
+valid_cnt <= #`DEL 3’h0;
+end
+else if (((valid_cnt == 3’h0) && (add_en == 1’b1)) ||
+(valid_cnt != 3’h0)) begin
+// Увеличить счетчик, если сигналы valid и add_en = 1
+// или valid = 0
+valid_cnt <= #`DEL valid_cnt + 1;
+end
+end
+endmodule // Конец модуля Adder
+// ПОДЧИНЕННЫЙ МОДУЛЬ
+module Adder_4bit(
+clk,
+a,
+b,
+add_en,
+cin,
+out,
+cout);
+// ВХОДЫ
+input clk; // Тактирующий импульс
+input [3:0] a; // 4-битный входной сигнал операнда A
+input [3:0] b; // 4-битный входной сигнал операнда B
+input cin; // Бит переноса на входе
+input reset_n; // Срабатывающий по спаду
+// синхронный сигнал сброса
+input add_en; // Синхронный сигнал разрешения работы
+// ВЫХОДЫ
+output [3:0] out; // 4-битный выход (сумма)
+output cout; // Переполнение выхода
+// ОБЪЯВЛЕНИЯ СИГНАЛОВ
+wire clk;
+wire [3:0] a;
+wire [3:0] b;
+wire cin;
+wire reset_n;
+wire add_en;
+reg [3:0] out;
+reg cout;
+// ОСНОВНОЙ КОД
+// Ожидание возрастания тактирующего сигнала
+always @(posedge clk) begin
+if (~reset_n) begin
+{cout,out} <= #`DEL 33’h00000000;
+end
+else if (add_en) begin
+{cout, out} <= #`DEL a+b+cin;
+end
+end
+endmodule // Конец модуля Adder_4bit

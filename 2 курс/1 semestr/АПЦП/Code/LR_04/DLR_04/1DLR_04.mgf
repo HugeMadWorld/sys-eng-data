@@ -1,0 +1,70 @@
+I 000050 55 1587          1511720627917 registr_p
+(_unit VHDL (registr_p 0 28 (registr_p 0 38 ))
+	(_version v98)
+	(_time 1511720628011 2017.11.26 20:23:48)
+	(_source (\./src/registr_p.vhd\))
+	(_use (std(standard))(ieee(std_logic_1164)))
+	(_code 3f316e3a6c686c29373f2c646a383d3a69383f383d)
+	(_entity
+		(_time 1511720627887)
+		(_use (std(standard))(ieee(std_logic_1164)))
+	)
+	(_object
+		(_port (_internal CLK ~extieee.std_logic_1164.STD_LOGIC 0 30 (_entity (_in ))))
+		(_port (_internal WE ~extieee.std_logic_1164.STD_LOGIC 0 31 (_entity (_in ))))
+		(_port (_internal RE ~extieee.std_logic_1164.STD_LOGIC 0 32 (_entity (_in ))))
+		(_type (_internal ~STD_LOGIC_VECTOR{7~downto~0}~12 0 33 (_array ~extieee.std_logic_1164.STD_LOGIC ((_downto (i 7)(i 0))))))
+		(_port (_internal DATA_IN ~STD_LOGIC_VECTOR{7~downto~0}~12 0 33 (_entity (_in ))))
+		(_type (_internal ~STD_LOGIC_VECTOR{7~downto~0}~122 0 34 (_array ~extieee.std_logic_1164.STD_LOGIC ((_downto (i 7)(i 0))))))
+		(_port (_internal DATA_OUT ~STD_LOGIC_VECTOR{7~downto~0}~122 0 34 (_entity (_out ))))
+		(_type (_internal ~STD_LOGIC_VECTOR{7~downto~0}~13 0 41 (_array ~extieee.std_logic_1164.STD_LOGIC ((_downto (i 7)(i 0))))))
+		(_variable (_internal T ~STD_LOGIC_VECTOR{7~downto~0}~13 0 41 (_process 0 )))
+		(_process
+			(line__40(_architecture 0 0 40 (_process (_simple)(_target(4))(_sensitivity(0))(_read(1)(2)(3)))))
+		)
+		(_subprogram
+			(_external resolved (ieee std_logic_1164 15))
+		)
+		(_type (_external ~extieee.std_logic_1164.STD_LOGIC (ieee std_logic_1164 STD_LOGIC)))
+	)
+	(_static
+		(67372036 67372036 )
+	)
+	(_model . registr_p 1 -1
+	)
+)
+V 000050 55 1587          1511720672730 registr_p
+(_unit VHDL (registr_p 0 28 (registr_p 0 38 ))
+	(_version v98)
+	(_time 1511720672731 2017.11.26 20:24:32)
+	(_source (\./src/registr_p.vhd\))
+	(_use (std(standard))(ieee(std_logic_1164)))
+	(_code f4f7a7a4f5a3a7e2fcf4e7afa1f3f6f1a2f3f4f3f6)
+	(_entity
+		(_time 1511720627886)
+		(_use (std(standard))(ieee(std_logic_1164)))
+	)
+	(_object
+		(_port (_internal CLK ~extieee.std_logic_1164.STD_LOGIC 0 30 (_entity (_in ))))
+		(_port (_internal WE ~extieee.std_logic_1164.STD_LOGIC 0 31 (_entity (_in ))))
+		(_port (_internal RE ~extieee.std_logic_1164.STD_LOGIC 0 32 (_entity (_in ))))
+		(_type (_internal ~STD_LOGIC_VECTOR{7~downto~0}~12 0 33 (_array ~extieee.std_logic_1164.STD_LOGIC ((_downto (i 7)(i 0))))))
+		(_port (_internal DATA_IN ~STD_LOGIC_VECTOR{7~downto~0}~12 0 33 (_entity (_in ))))
+		(_type (_internal ~STD_LOGIC_VECTOR{7~downto~0}~122 0 34 (_array ~extieee.std_logic_1164.STD_LOGIC ((_downto (i 7)(i 0))))))
+		(_port (_internal DATA_OUT ~STD_LOGIC_VECTOR{7~downto~0}~122 0 34 (_entity (_out ))))
+		(_type (_internal ~STD_LOGIC_VECTOR{7~downto~0}~13 0 41 (_array ~extieee.std_logic_1164.STD_LOGIC ((_downto (i 7)(i 0))))))
+		(_variable (_internal T ~STD_LOGIC_VECTOR{7~downto~0}~13 0 41 (_process 0 )))
+		(_process
+			(line__40(_architecture 0 0 40 (_process (_simple)(_target(4))(_sensitivity(0))(_read(1)(2)(3)))))
+		)
+		(_subprogram
+			(_external resolved (ieee std_logic_1164 15))
+		)
+		(_type (_external ~extieee.std_logic_1164.STD_LOGIC (ieee std_logic_1164 STD_LOGIC)))
+	)
+	(_static
+		(67372036 67372036 )
+	)
+	(_model . registr_p 1 -1
+	)
+)

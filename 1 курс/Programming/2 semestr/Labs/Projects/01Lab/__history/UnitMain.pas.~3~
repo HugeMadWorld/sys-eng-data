@@ -1,0 +1,48 @@
+unit UnitMain;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, jpeg, ExtCtrls, Menus, ComCtrls;
+
+type
+  TFormMain = class(TForm)
+    TabControl1: TTabControl;
+    Label1: TLabel;
+    Label2: TLabel;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    Label3: TLabel;
+    ComboBox1: TComboBox;
+    Bevel1: TBevel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    CheckBox4: TCheckBox;
+    ComboBox2: TComboBox;
+    ComboBox3: TComboBox;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    ScrollBar1: TScrollBar;
+    ScrollBar2: TScrollBar;
+    Image2: TImage;
+    Image3: TImage;
+    Bevel2: TBevel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormMain: TFormMain;
+
+implementation
+
+{$R *.dfm}
+
+end.

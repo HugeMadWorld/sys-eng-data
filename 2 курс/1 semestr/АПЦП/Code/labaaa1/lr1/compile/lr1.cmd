@@ -1,0 +1,1 @@
+-w -s "c:\My_Designs\labaaa1\library.cfg"  -j "c:\My_Designs\labaaa1\lr1\projlib.cfg"  -d "c:\My_Designs\labaaa1\lr1\compile"   -work lr1  -O3 -e 100 -2002 "c:\My_Designs\labaaa1\lr1\compile\sm.vhd"

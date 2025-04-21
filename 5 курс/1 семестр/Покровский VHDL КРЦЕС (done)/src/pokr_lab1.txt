@@ -1,0 +1,241 @@
+ .include "m16def.inc"
+ .def temp = R16
+ .equ CTC_VALUE = 31250
+ .def CHANNEL = R17
+ .def tempH = R18
+ .def CH0L = R20
+ .def CH0H = R21
+ .def CH1L = R22
+ .def CH1H = R23
+ .def CH2L = R24
+ .def CH2H = R25
+ .def Ans = R15
+ .def AnsU = R14
+ .def AnsX = R13
+
+
+ .macro CH_N ; @0-CHNL | @1-CHNH 
+ add @0,temp
+ adc @1,tempH ; Add with Carry
+ lsr @1 
+ ror @0 ; Rotate Right Through Carry
+ rjmp CHANGE_CH
+ .endm
+
+ .macro CMP_CH_N ; @0-CHNL | @1-CHNH | @2-TURN_OFF_0 | @3-TURN_ON_0 | @4-CMPR_L0 | @5-CMPR_H0 | @6-END_CH0 | @7- Port Number (0/1/2)
+ cpi @1,HIGH(800) ; 
+ brsh @5
+ rjmp @2
+ @5:
+ cpi @1,HIGH(800) ; 
+ breq @4
+ @3:
+ sbi PORTB,@7 ;turn on LED
+ rjmp @6
+ @4:
+ cpi @0,LOW(800) ; 
+ brsh @3
+ @2:
+ cbi PORTB,@7 ;turn off LED
+ @6:
+ .endm
+
+ jmp RESET ; Reset Handler
+ jmp EXT_INT0 ; IRQ0 Handler
+ jmp EXT_INT1 ; IRQ1 Handler
+ jmp TIM2_COMP ; Timer2 Compare Handler
+ jmp TIM2_OVF ; Timer2 Overflow Handler
+ jmp TIM1_CAPT ; Timer1 Capture Handler
+ jmp TIM1_COMPA ; Timer1 CompareA Handler
+ jmp TIM1_COMPB ; Timer1 CompareB Handler
+ jmp TIM1_OVF ; Timer1 Overflow Handler
+ jmp TIM0_OVF ; Timer0 Overflow Handler
+ jmp SPI_STC ; SPI Transfer Complete Handler
+ jmp USART_RXC ; USART RX Complete Handler
+ jmp USART_UDRE ; UDR Empty Handler
+ jmp USART_TXC ; USART TX Complete Handler
+ jmp ADC_C ; ADC Conversion Complete Handler
+ jmp EE_RDY ; EEPROM Ready Handler
+ jmp ANA_COMP ; Analog Comparator Handler
+ jmp TWSI ; Two-wire Serial Interface Handler
+ jmp EXT_INT2 ; IRQ2 Handler
+ jmp TIM0_COMP ; Timer0 Compare Handler
+ jmp SPM_RDY ; Store Program Memory Ready Handler
+;
+
+ RESET: 
+ ldi temp,high(RAMEND) ; Main program start
+ out SPH,temp ; Set Stack Pointer to top of RAM
+ ldi temp,low(RAMEND)
+ out SPL,temp
+
+ ; Define pull-ups and set outputs high
+ ; Define directions for port pins
+ ldi temp,(0<<PB0)|(0<<PB1)|(0<<PB2)
+ out PORTB,temp
+ ldi temp,(1<<DDB0)|(1<<DDB1)|(1<<DDB2)
+ out DDRB,temp
+ ; Define ADC
+ ldi temp,(0<<MUX4)|(0<<MUX3)|(0<<MUX2)|(0<<MUX1)|(0<<MUX0)|(0<<ADLAR)|(0<<REFS1)|(0<<REFS0)|(1<<DDB2)
+ out ADMUX,temp
+ ldi temp,(1<<ADEN)|(1<<ADSC)|(0<<ADATE)|(1<<ADIE)|(1<<ADPS2)|(1<<ADPS1)|(0<<ADPS0)
+ out ADCSRA,temp
+ ; Define Timer (sampling time 1s)
+ ldi temp,high(CTC_VALUE)
+ out OCR1AH,temp
+ ldi temp,low(CTC_VALUE)
+ out OCR1AL,temp
+
+ ldi temp,(0<<WGM11)|(0<<WGM10)
+ out TCCR1A,temp
+ ldi temp,(0<<WGM13)|(1<<WGM12)|(1<<CS12)|(0<<CS11)|(0<<CS10)
+ out TCCR1B,temp
+ ; start from 0 channel
+ ldi CHANNEL,0
+ clr CH0L
+ clr CH0H
+ clr CH1L
+ clr CH1H
+ clr CH2L
+ clr CH2H
+
+ sei ; Enable interrupts
+
+ LOOP: 
+ rjmp LOOP
+
+ ADC_C: ; ADC Conversion Complete Handler
+ in temp,ADCL; from ADC to Core
+ in tempH,ADCH
+ cpi CHANNEL,0
+ breq CH0
+ cpi CHANNEL,1
+ breq CH1
+ cpi CHANNEL,2
+ breq CH2
+ CHANGE_CH:
+ inc CHANNEL
+ cpi CHANNEL,3
+ breq END_ADC
+ out ADMUX,CHANNEL
+ ldi temp,(1<<ADEN)|(1<<ADSC)|(0<<ADATE)|(1<<ADIE)|(1<<ADPS2)|(1<<ADPS1)|(0<<ADPS0)
+ out ADCSRA,temp
+ END_ADC:
+ reti
+
+ CH0:
+ CH_N CH0L, CH0H
+ //add CH0L,temp
+ //adc CH0H,tempH ; Add with Carry
+ //lsr CH0H 
+ //ror CH0L ; Rotate Right Through Carry
+ //rjmp CHANGE_CH
+ CH1:
+ CH_N CH1L, CH1H
+ //add CH1L,temp
+ //adc CH1H,tempH ; Add with Carry
+ //lsr CH1H 
+ //ror CH1L ; Rotate Right Through Carry
+ //rjmp CHANGE_CH
+ CH2:
+ CH_N CH2L, CH2H
+ //add CH2L,temp
+ //adc CH2H,tempH ; Add with Carry
+ //lsr CH2H 
+ //ror CH2L ; Rotate Right Through Carry
+ //rjmp CHANGE_CH
+
+ TIM1_COMPA: ; Timer1 CompareA Handler
+ ldi CHANNEL, 0
+ out ADMUX,CHANNEL
+ ldi temp,(1<<ADEN)|(1<<ADSC)|(0<<ADATE)|(1<<ADIE)|(1<<ADPS2)|(1<<ADPS1)|(0<<ADPS0)
+ out ADCSRA,temp ;start ADC after 3 ch , start next measure cycle 
+ 
+ CMP_CH_N CH0L, CH0H, TURN_OFF_0, TURN_ON_0, CMPR_L0, CMPR_H0, END_CH0, 0
+ CMP_CH_N CH1L, CH1H, TURN_OFF_1, TURN_ON_1, CMPR_L1, CMPR_H1, END_CH1, 1
+ CMP_CH_N CH2L, CH2H, TURN_OFF_2, TURN_ON_2, CMPR_L2, CMPR_H2, END_CH2, 2
+
+ clr Ans; clear var
+ clr AnsU
+ clr AnsX
+
+ mov temp,CH0L
+ mov tempH,CH0H
+ rcall TO_BCD
+ sts (CH0_IND+0),Ans
+ sts (CH0_IND+1),AnsU
+ sts (CH0_IND+2),AnsX
+ 
+
+ mov temp,CH1L
+ mov tempH,CH1H
+ rcall TO_BCD
+ sts (CH1_IND+0),Ans
+ sts (CH1_IND+1),AnsU
+ sts (CH1_IND+2),AnsX
+
+
+ mov temp,CH2L
+ mov tempH,CH2H
+ rcall TO_BCD
+ sts (CH2_IND+0),Ans
+ sts (CH2_IND+1),AnsU
+ sts (CH2_IND+2),AnsX
+
+
+ reti
+
+ EXT_INT0: ; IRQ0 Handler
+ EXT_INT1: ; IRQ1 Handler
+ TIM2_COMP: ; Timer2 Compare Handler
+ TIM2_OVF: ; Timer2 Overflow Handler
+ TIM1_CAPT: ; Timer1 Capture Handler
+ TIM1_COMPB: ; Timer1 CompareB Handler
+ TIM1_OVF: ; Timer1 Overflow Handler
+ TIM0_OVF: ; Timer0 Overflow Handler
+ SPI_STC: ; SPI Transfer Complete Handler
+ USART_RXC: ; USART RX Complete Handler
+ USART_UDRE: ; UDR Empty Handler
+ USART_TXC: ; USART TX Complete Handler
+
+ EE_RDY: ; EEPROM Ready Handler
+ ANA_COMP: ; Analog Comparator Handler
+ TWSI: ; Two-wire Serial Interface Handler
+ EXT_INT2: ; IRQ2 Handler
+ TIM0_COMP: ; Timer0 Compare Handler
+ SPM_RDY:; Store Program Memory Ready Handler
+ reti
+
+ To_BCD: //binary code to decimal digits
+lvl200:
+ cpi tempH,0
+ brne Sub200
+ cpi temp,200
+ brlo lvl20
+ Sub200:
+ subi temp,200
+ sbci tempH,0
+ inc Ans
+ rjmp lvl200
+ lvl20:
+ cpi temp,20
+ brlo lvl2
+ subi temp,20
+ inc AnsU
+rjmp lvl20
+lvl2:
+lsr temp; shif temp ==> /2
+mov AnsX,temp
+ret
+
+
+ .dseg
+
+ CH0_IND:
+ .byte 3
+
+ CH1_IND:
+ .byte 3
+
+ CH2_IND:
+ .byte 3

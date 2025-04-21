@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Калькулятор тригонометрических функций</title>
+
+<body bgcolor="LightGrey">
+<h1 align="center"><font face="Verdana">Калькулятор тригонометрических функций</font></h1>
+
+
+<style>
+#table1
+{  position:absolute;
+    left:0px;
+    top:180px;
+    width:20%; /* Ширина таблицы */
+	border-spacing: 15px 20px; /* Расстояние между ячейками */ 
+} 
+
+.rightimg 
+{
+    float:right; /* Выравнивание по правому краю */
+    margin: -65px 100px 0px 0; /* Отступы вокруг картинки */
+}
+</style>
+
+<script>
+function calc() {
+    var number1 = document.getElementsByName("digit1")[0].value;
+    numbers = Math.sin(degToRad(number1));
+    document.getElementById('result').innerHTML = numbers;
+}
+function calc1() {
+    var number1 = document.getElementsByName("digit1")[0].value;
+    numbers = Math.cos(degToRad(number1));
+    document.getElementById('result').innerHTML = numbers;
+}
+function calc2() {
+    var number1 = document.getElementsByName("digit1")[0].value;
+    numbers = Math.tan(degToRad(number1));
+    document.getElementById('result').innerHTML = numbers;
+}
+function degToRad (deg) { return deg / 180 * Math.PI; }
+</script>
+</head> 
+
+<body>
+<form id="calculator">
+<p><font face="Verdana"size="4">Введите значения угла(градусы)</font></p>
+    <input type="text" name="digit1">
+<font face="Verdana"size="4">Результат: <span id="result"></span></font></td>
+    
+<table id="table1">
+<tr>
+<td><input type="button" onclick="calc()" value="Синус"></td>
+<td><input type="button" onclick="calc1()" value="Косинус"></td>
+<td><input type="button" onclick="calc2()" value="Тангенс"></td>
+</tr>
+
+</table>
+</form> 
+<img src="http://www.biover.ru/books/pic-diffur.kemsu.ru/1/sprav/trig_formul.files/image002.jpg"width="750" height="550" class="rightimg">
+</body>
+</html>

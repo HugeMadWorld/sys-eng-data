@@ -1,0 +1,360 @@
+/*Контроллер динамической оперативной памяти DRAM
+параграф 5.3 учебника
+*/
+
+/*Поведенческий код*/
+// ОПРЕДЕЛЕНИЯ КОНСТАНТ
+`define DEL 1 // Задержка распространения сигнала в
+// устройстве. Нулевая задержка может
+// привести к проблемам
+`define RBC_CYC 2 // Число тактов для удержания сигнала RAS
+// перед установкой сигнала CAS
+`define CBR_CYC 1 // Число тактов для удержания сигнала CAS
+// перед установкой сигнала RAS
+`define RACW_CYC 1 // Число тактов для удержания сигналов
+// RAS и CAS вместе при записи
+`define RACR_CYC 2 // Число тактов для удержания сигналов
+// RAS и CAS вместе при считывании
+`define RACRF_CYC 1 // Число тактов для удержания сигналов
+// RAS и CAS вместе при регенерации
+`define CNT_BITS 2 // Число тактов, необходимое счетчику
+// для подсчитывания представленных
+// ниже сигналов
+`define REF_cnt 24 // Число тактов между регенерациями
+`define REF_BITS 5 // Число битов, необходимое счетчику
+// для отсчитывания промежутка
+// между регенерациями
+`define AOUT 4 // Разрядность шины адреса
+// со стороны DRAM
+`define AIN 2*`AOUT // Разрядность шины адреса
+// со стороны процессора
+// ГЛАВНЫЙ МОДУЛЬ
+module Dram_control(
+clock,
+reset_n,
+as_n,
+addr_in,
+addr_out,
+rw,
+we_n,
+ras_n,
+cas_n,
+ack);
+// ВХОДЫ
+input clock; // Тактирующий сигнал для
+// конечных автоматов
+input reset_n; // Срабатывающий по спаду
+// синхронный сигнал сброса reset
+input as_n; // Срабатывающий по спаду
+// строб адреса
+input [`AIN-1:0] addr_in; // Адрес со стороны процессора
+input rw; // Сигнал выбора запись/считывания
+// = 1 соответствует считыванию
+// = 0 соответствует записи
+// ВЫХОДЫ
+output [`AOUT-1:0]addr_out; // Адрес для DRAM
+output we_n; // Сигнал разрешения записи
+output ras_n; // Строб адреса строки для
+// памяти DRAM
+output cas_n; // Строб адреса столбца для
+// памяти DRAM
+output ack; // Сигнал подтверждения
+// для процессора
+// ОБЪЯВЛЕНИЯ СИГНАЛОВ
+wire clock;
+wire reset_n;
+wire [`AIN-1:0] addr_in;
+wire as_n;
+wire rw;
+wire we_n;
+wire ras_n;
+wire cas_n;
+wire ack;
+wire [`AOUT-1:0] addr_out;
+reg [3:0] mem_state; // Конечный автомат
+wire col_out; // Адрес колонки/строки
+// = 1 – выбор колонки
+// = 0 – выбор строки
+reg [`CNT_BITS-1:0] count; // Счетчик тактов
+reg [`REF_BITS-1:0] ref_count; // Счетчик тактов при
+// регенерации
+reg refresh; // Запрос на регенерацию
+// ПАРАМЕТРЫ
+// Биты состояний представляют следующие сигналы:
+// col_out, ras, cas, ack
+parameter[3:0] // Состояния автомата
+IDLE = 4’b0000,
+ACCESS = 4’b0100,
+SWITCH = 4’b1100,
+RAS_CAS = 4’b1110,
+ACK = 4’b1111,
+REF1 = 4’b0010,
+REF2 = 4’b0110;
+// ОПЕРАТОРЫ ПОТОКОВ ДАННЫХ
+// Пересылка сигналов на управляющие выходы из состояния автомата
+assign col_out = mem_state[3];
+assign ras_n = ~mem_state[2];
+assign cas_n = ~mem_state[1];
+assign ack = mem_state[0];
+// Сброс сигнала we_n в течении регенерации
+assign #`DEL we_n = rw | (mem_state == REF1) |
+(mem_state == REF2);
+// Пересылка адресов столбца или строки на DRAM в зависимости от
+// значения сигнала col_out
+assign #`DEL addr_out = col_out? addr_in[`AOUT-1:0] :
+addr_in[`AIN-1:`AOUT];
+// ОСНОВНОЙ КОД
+// Отслеживание событий на сигнале reset
+always @(reset_n) begin
+if (~reset_n) begin
+#`DEL assign mem_state = IDLE;
+assign count = `CNT_BITS’h0;
+assign ref_count = `REF_CNT;
+assign refresh = 1’b0;
+end
+else begin
+#`DEL;
+deassign mem_state;
+deassign count;
+deassign ref_count;
+deassign refresh;
+end
+end
+// Ожидание возрастания тактирующего сигнала
+always @(posedge clock) begin
+// Наступило ли время запроса на регенерацию?
+if (ref_count == 0) begin
+refresh <= #`DEL 1’b1;
+ref_count <= #`DEL `REF_CNT;
+end
+else
+ref_count <= #`DEL ref_count – 1;
+// Обнуление счетчика тактов
+if (count)
+count <= #`DEL count – 1;
+case (mem_state)
+IDLE: begin
+// Запрос на регенерацию имеет наибольший приоритет
+if (refresh) begin
+// Загрузка счетчика для отсчитывания времени
+// удержания сигнала CAS
+count <= #`DEL `CBR_CYC;
+mem_state <= #`DEL REF1;
+end
+else if (~as_n) begin
+// Загрузка счетчика для отсчитывания времени
+// удержания сигнала RAS
+count <= #`DEL `RBC_CYC;
+mem_state <= #`DEL ACCESS;
+end
+end
+ACCESS: begin
+mem_state <= #`DEL SWITCH;
+end
+SWITCH: begin
+if (count == 0) begin
+mem_state <= #`DEL RAS_CAS;
+if (rw)
+count <= #`DEL `RACR_CYC;
+else
+count <= #`DEL `RACW_CYC;
+end
+end
+RAS_CAS:begin
+if (count == 0) begin
+mem_state <= #`DEL ACK;
+end
+end
+ACK: begin
+mem_state <= #`DEL IDLE;
+end
+REF1: begin
+if (count == 0) begin
+mem_state <= #`DEL REF2;
+count <= #`DEL `RACRF_CYC;
+end
+end
+REF2: begin
+if (count == 0) begin
+mem_state <= #`DEL IDLE;
+refresh <= #`DEL 1’b0;
+end
+end
+endcase
+end
+endmodule // Конец модуля Dram_control
+
+
+/*Код уровня регистровых передач*/
+
+
+// ОПРЕДЕЛЕНИЯ КОНСТАНТ
+`define DEL 1 // Задержка распространения сигнала в
+// устройстве. Нулевая задержка может
+// привести к проблемам
+`define RBC_CYC 2 // Число тактов для удержания сигнала RAS
+// перед установкой сигнала CAS
+`define CBR_CYC 1 // Число тактов для удержания сигнала CAS
+// перед установкой сигнала RAS
+`define RACW_CYC 1 // Число тактов для удержания сигналов
+// RAS и CAS вместе при записи
+`define RACR_CYC 2 // Число тактов для удержания сигналов
+// RAS и CAS вместе при считывании
+`define RACRF_CYC 1 // Число тактов для удержания сигналов
+// RAS и CAS вместе при регенерации
+`define CNT_BITS 2 // Число тактов, необходимое счетчику
+// для подсчитывания представленных
+// ниже сигналов
+`define REF_cnt 24 // Число тактов между регенерациями
+`define REF_BITS 5 // Число битов, необходимое счетчику
+// для отсчитывания промежутка
+// между регенерациями
+`define AOUT 4 // Разрядность шины адреса
+// со стороны DRAM
+`define AIN 2*`AOUT // Разрядность шины адреса
+// со стороны процессора
+// ГЛАВНЫЙ МОДУЛЬ
+module Dram_control(
+clock,
+reset_n,
+as_n,
+addr_in,
+addr_out,
+rw,
+we_n,
+ras_n,
+cas_n,
+ack);
+// ВХОДЫ
+input clock; // Тактирующий сигнал для
+// конечных автоматов
+input reset_n; // Срабатывающий по спаду
+// синхронный сигнал сброса reset
+input as_n; // Срабатывающий по спаду
+// строб адреса
+input [`AIN-1:0] addr_in; // Адрес со стороны процессора
+input rw; // Сигнал выбора запись/считывания
+// = 1 соответствует считыванию
+// = 0 соответствует записи
+// ВЫХОДЫ
+output [`AOUT-1:0]addr_out; // Адрес для DRAM
+output we_n; // Сигнал разрешения записи
+output ras_n; // Строб адреса строки для
+// памяти DRAM
+output cas_n; // Строб адреса столбца для
+// памяти DRAM
+output ack; // Сигнал подтверждения
+// для процессора
+// ОБЪЯВЛЕНИЯ СИГНАЛОВ
+wire clock;
+wire reset_n;
+wire [`AIN-1:0] addr_in;
+wire as_n;
+wire rw;
+wire we_n;
+wire ras_n;
+wire cas_n;
+wire ack;
+wire [`AOUT-1:0] addr_out;
+wire col_out; // Адрес колонки/строки
+// = 1 – выбор колонки
+// = 0 – выбор строки
+reg [`CNT_BITS-1:0] count; // Счетчик тактов
+reg [`REF_BITS-1:0] ref_count; // Счетчик тактов при
+// регенерации
+reg refresh; // Запрос на регенерацию
+// ПАРАМЕТРЫ
+// Биты состояний представляют следующие сигналы:
+// col_out, ras, cas, ack
+parameter[3:0] // Состояния автомата
+IDLE = 4’b0000,
+ACCESS = 4’b0100,
+SWITCH = 4’b1100,
+RAS_CAS = 4’b1110,
+ACK = 4’b1111,
+REF1 = 4’b0010,
+REF2 = 4’b0110;
+// ОПЕРАТОРЫ ПОТОКОВ ДАННЫХ
+// Пересылка сигналов на управляющие выходы из состояния автомата
+assign col_out = mem_state[3];
+assign ras_n = ~mem_state[2];
+assign cas_n = ~mem_state[1];
+assign ack = mem_state[0];
+// Сброс сигнала we_n в течении регенерации
+assign #`DEL we_n = rw | (mem_state == REF1) |
+(mem_state == REF2);
+// Пересылка адресов столбца или строки на DRAM в зависимости от
+// значения сигнала col_out
+assign #`DEL addr_out = col_out? addr_in[`AOUT-1:0] :
+addr_in[`AIN-1:`AOUT];
+// ОСНОВНОЙ КОД
+// Отслеживание событий, управляющих переходом между
+// состояниями
+always @(posedge clock or negedge reset_n) begin
+if (~reset_n) begin
+mem_state <= #`DEL IDLE;
+count <= #`DEL `CNT_BITS’h0;
+ref_count <= #`DEL `REF_CNT;
+refresh <= #`DEL 1’b0;
+end
+else begin
+// Наступило ли время запроса на регенерацию?
+if (ref_count == 0) begin
+refresh <= #`DEL 1’b1;
+ref_count <= #`DEL `REF_CNT;
+end
+else
+ref_count <= #`DEL ref_count – 1;
+// Обнуление счетчика тактов
+if (count)
+count <= #`DEL count – 1;
+case (mem_state)
+IDLE: begin
+// Запрос на регенерацию имеет наибольший приоритет
+if (refresh) begin
+// Загрузка счетчика для отсчитывания
+// времени удержания сигнала CAS
+count <= #`DEL `CBR_CYC;
+mem_state <= #`DEL REF1;
+end
+else if (~as_n) begin
+// Загрузка счетчика для отсчитывания
+// времени удержания сигнала RAS
+count <= #`DEL `RBC_CYC;
+mem_state <= #`DEL ACCESS;
+end
+end
+ACCESS: begin
+SWITCH: begin
+if (count == 0) begin
+mem_state <= #`DEL RAS_CAS;
+if (rw)
+count <= #`DEL `RACR_CYC;
+else
+count <= #`DEL `RACW_CYC;
+end
+end
+RAS_CAS:begin
+if (count == 0) begin
+mem_state <= #`DEL ACK;
+end
+end
+ACK: begin
+mem_state <= #`DEL IDLE;
+end
+REF1: begin
+if (count == 0) begin
+mem_state <= #`DEL REF2;
+count <= #`DEL `RACRF_CYC;
+end
+end
+REF2: begin
+if (count == 0) begin
+mem_state <= #`DEL IDLE;
+refresh <= #`DEL 1’b0;
+end
+end
+endcase
+end
+end
+endmodule // Конец модуля Dram_control

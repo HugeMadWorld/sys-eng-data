@@ -1,0 +1,6 @@
+(21:41:25) ERR_RTM:hasp driver login = 7
+INF_LOAD:Node=1 tags=53 templates=0 obj=9 
+INF_LOAD:Max: tags=16777215 templates=32767 obj=32767 
+INF_LOAD:Node type=90901000 
+INF_LOAD:RTM_2 
+INF_LOAD:Found CH=26 Resource=0 ExtResurce=0 

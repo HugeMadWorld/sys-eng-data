@@ -1,0 +1,8 @@
+syms t a b c
+w=5+a*(t-100)+b*(t-100)^3+c*(t-100)^5
+w0=subs(w,t,0)
+w1=subs(diff(w,t),t,0)
+w2=subs(diff(w,t,2),t,0)
+[aa,bb,cc]=solve(w0,w1,w2)
+w=subs(w,[a,b,c],[aa,bb,cc])
+diff(w,t,2)

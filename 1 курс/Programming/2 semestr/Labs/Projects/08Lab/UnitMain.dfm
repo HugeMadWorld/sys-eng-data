@@ -1,0 +1,142 @@
+object FormMain: TFormMain
+  Left = 191
+  Top = 128
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = #1043#1088#1072#1092#1080#1082
+  ClientHeight = 257
+  ClientWidth = 695
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  Menu = mnuBar
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object lbla: TLabel
+    Left = 8
+    Top = 224
+    Width = 11
+    Height = 20
+    Caption = 'A'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object lblb: TLabel
+    Left = 80
+    Top = 224
+    Width = 11
+    Height = 20
+    Caption = 'B'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object lbld: TLabel
+    Left = 224
+    Top = 224
+    Width = 12
+    Height = 20
+    Caption = 'D'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object lblc: TLabel
+    Left = 152
+    Top = 224
+    Width = 11
+    Height = 20
+    Caption = 'C'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object slda: TTrackBar
+    Left = 0
+    Top = 0
+    Width = 45
+    Height = 225
+    Max = 100
+    Min = -100
+    Orientation = trVertical
+    Frequency = 10
+    Position = -10
+    TabOrder = 0
+    OnChange = sldaChange
+  end
+  object sldb: TTrackBar
+    Left = 72
+    Top = 0
+    Width = 45
+    Height = 225
+    Max = 100
+    Min = -100
+    Orientation = trVertical
+    Frequency = 10
+    Position = -10
+    TabOrder = 1
+    OnChange = sldbChange
+  end
+  object sldc: TTrackBar
+    Left = 144
+    Top = 0
+    Width = 45
+    Height = 225
+    Max = 100
+    Min = -100
+    Orientation = trVertical
+    Frequency = 10
+    TabOrder = 3
+    OnChange = sldcChange
+  end
+  object sldd: TTrackBar
+    Left = 216
+    Top = 0
+    Width = 45
+    Height = 225
+    Max = 100
+    Min = -100
+    Orientation = trVertical
+    Frequency = 10
+    TabOrder = 2
+    OnChange = slddChange
+  end
+  object mnuBar: TMainMenu
+    Left = 640
+    Top = 208
+    object mnuFile: TMenuItem
+      Caption = #1060#1072#1081#1083
+      object mnuExit: TMenuItem
+        Caption = #1042#1099#1093#1086#1076
+        OnClick = mnuExitClick
+      end
+    end
+    object mnuHelp: TMenuItem
+      Caption = #1055#1086#1084#1086#1097#1100
+      object mnuAbout: TMenuItem
+        Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
+        OnClick = mnuAboutClick
+      end
+    end
+  end
+end

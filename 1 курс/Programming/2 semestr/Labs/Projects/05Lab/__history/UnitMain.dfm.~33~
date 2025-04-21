@@ -1,0 +1,69 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Text Editor'
+  ClientHeight = 152
+  ClientWidth = 235
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = MnuBar
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 7
+    Top = 131
+    Width = 178
+    Height = 13
+    Visible = False
+  end
+  object BttnEdit: TButton
+    Left = 81
+    Top = 103
+    Width = 75
+    Height = 25
+    Caption = 'Edit Text'
+    TabOrder = 0
+    OnClick = BttnEditClick
+  end
+  object MemoInput: TMemo
+    Left = 10
+    Top = 8
+    Width = 217
+    Height = 89
+    Lines.Strings = (
+      'Input Text')
+    TabOrder = 1
+  end
+  object MnuBar: TMainMenu
+    Left = 199
+    Top = 104
+    object MnuFile: TMenuItem
+      Caption = 'File'
+      object MnuExit: TMenuItem
+        Caption = 'Exit'
+        OnClick = MnuExitClick
+      end
+    end
+    object MnuEdit: TMenuItem
+      Caption = 'Edit'
+      object MnuClear: TMenuItem
+        Caption = 'Clear'
+        OnClick = MnuClearClick
+      end
+    end
+    object MnuInfo: TMenuItem
+      Caption = 'Info'
+      object MnuAbout: TMenuItem
+        Caption = 'About Programm'
+        OnClick = MnuAboutClick
+      end
+    end
+  end
+end

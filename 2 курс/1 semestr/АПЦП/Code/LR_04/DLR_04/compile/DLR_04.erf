@@ -1,0 +1,5 @@
+WARNING DAGGEN_0523: "The source is compiled without the -dbg switch. Line breakpoints, code coverage, and assertion debug will not be available." 
+MESSAGE "File: c:\My_Designs\LR_04\DLR_04\src\registr_p.vhd" 
+MESSAGE "Compile Entity "registr_p"" 
+MESSAGE "Compile Architecture "registr_p" of Entity "registr_p"" 
+SUCCESS "Compile success 0 Errors 0 Warnings  Analysis time :  0.7 [s]" 

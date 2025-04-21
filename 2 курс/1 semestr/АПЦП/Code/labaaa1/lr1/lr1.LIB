@@ -1,0 +1,25 @@
+timestamp=1505125838265
+
+[sm]
+A/sm_arch=23|.\src\sm.asf|10000|1*4344
+BinI32/sm_arch=3*0
+I=0*514
+I/sm_arch=0*4286
+M=11|0|v98|1505124449234|./compile/sm.vhd|0*162*0x9be721929ac667f440c12992df81702caa623703|0*445*0xab32bc1a2daf049573e14469f634e0e6
+M/sm_arch=21|0|v98|1505125838236|./compile/sm.vhd|0*3579*0xcb5860e59bedbd62b3197f0d29f9df71d9fdd8e6|0*4206*0xb33770ff1c10522f9491560174ac8e6c
+R=./compile/sm.vhd|26
+Version=9.1.2353.4205  (Windows)|00000003789cd3f5370600015b00b0
+Version/sm_arch=9.1.2353.4205  (Windows)|00000003789cd3f5370600015b00b0
+
+[~A]
+ModifyID=27
+Version=73
+
+[~MFT]
+0=24|0lr1.mgf|4286|2835
+1=6|1lr1.mgf|4344|4344
+3=0|3lr1.mgf|0|0
+
+[~U]
+sm=11|0*0|
+

@@ -1,0 +1,234 @@
+unit UnitMain;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, VclTee.TeeGDIPlus,
+  Vcl.StdCtrls, Vcl.Imaging.pngimage, Vcl.ExtCtrls, Vcl.ComCtrls,
+  VCLTee.TeEngine, VCLTee.TeeProcs, VCLTee.Chart, VCLTee.Series;
+
+type
+  TFormMain = class(TForm)
+    mnuMain: TMainMenu;
+    mnuFil: TMenuItem;
+    mnuExit: TMenuItem;
+    ChartMain: TChart;
+    TrackBarK: TTrackBar;
+    TrackBarT1: TTrackBar;
+    lblT1: TLabel;
+    lblK: TLabel;
+    ImageMain: TImage;
+    EditK: TEdit;
+    EditT1: TEdit;
+    lblt21: TLabel;
+    lblt22: TLabel;
+    lblt23: TLabel;
+    lblt24: TLabel;
+    lblt25: TLabel;
+    Series1: TLineSeries;
+    Series2: TLineSeries;
+    lblT2: TLabel;
+    EditT2: TEdit;
+    TrackBarT2: TTrackBar;
+    mnuHelp: TMenuItem;
+    mnuAbout: TMenuItem;
+    TrackBarOmega: TTrackBar;
+    EditOmega: TEdit;
+    lblomega: TLabel;
+    lblom1: TLabel;
+    lblom3: TLabel;
+    lblom2: TLabel;
+    lblt11: TLabel;
+    lblt12: TLabel;
+    lblt13: TLabel;
+    lblt14: TLabel;
+    lblt15: TLabel;
+    lblk1: TLabel;
+    lblk4: TLabel;
+    lblk3: TLabel;
+    lblk2: TLabel;
+    procedure mnuExitClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure TrackBarKChange(Sender: TObject);
+    procedure TrackBarT1Change(Sender: TObject);
+    procedure TrackBarT2Change(Sender: TObject);
+    procedure TrackBarOmegaChange(Sender: TObject);
+    procedure mnuAboutClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    procedure Axis;
+    procedure Draw;
+    procedure Calc;
+    procedure Lim(y:single);
+    { Public declarations }
+  end;
+
+var
+  FormMain: TFormMain;
+
+implementation
+
+{$R *.dfm}
+
+const
+ 	N=3900;//количество точек для рисования функции
+	Ymin=0;
+  Ymax=20;
+  Tm=100;
+
+var
+	K,T1,T2,Wo:single; //изменяющиеся параметры
+	y,t:array[0..N] of single; //координаты точек на графике
+
+function F(t:single):single;
+var r:single;
+begin
+   r:=sin(Wo*t);
+   if r>=0 then Result:=Ymax
+   else Result:=0;
+end;
+
+//Формула
+function Q(t,u,p,w:single):single;
+const U0=10;
+var
+  A,B:single;
+begin
+  A:=T1*T2;
+  B:=T1+T2;
+  Result:=(U0*F(t)/K-B*w-p)/A;   //1/A*(F(t)/k-du-cp-bw)
+end;
+
+procedure TFrmGraph.Lim(Var Y:double);
+const
+   Max=1000;
+begin
+   if Y>Max then Y:=Max;
+   if Y<-Max then Y:=-Max;
+end;
+
+//пересчет точек
+procedure TFormMain.Calc;
+var
+   h:single;
+   i:integer;
+   X:array[0..N] of single;// первая производная
+   Z:array[0..N] of single;// вторая производная
+   ky1,ky2,ky3,ky4:single;
+   kx1,kx2,kx3,kx4:single;
+   ph1,ph2,ph3,ph4:single;
+begin
+  h:=Tm/N; //шаг
+  for i:=1 to N do
+  begin
+    X[i]:=0;
+    Y[i]:=Ymax;
+    Z[i]:=0 ;
+    t[i]:=i*h;
+  end;
+  Y[0]:=Ymin;    X[0]:=0;    Z[0]:=0;
+  for i:=0 to N-1 do //Метод Рунге-Кутты
+  begin
+    kx1:=z[i];
+    ky1:=x[i];
+    ph1:=Q(t[i],y[i],ky1,kx1);
+
+    kx2:=z[i]+ph1*h/2;
+    ky2:=x[i]+kx1*h/2;
+    ph2:=Q(t[i]+h/2,y[i]+ky1*h/2,ky2,kx2);
+
+    kx3:=z[i]+ph2*h/2;
+    ky3:=x[i]+kx2*h/2;
+    ph3:=Q(t[i]+h/2,y[i]+ky2*h/2,ky3,kx3);
+
+    kx4:=z[i]+ph3*h;
+    ky4:=x[i]+kx3*h;
+    ph4:=Q(t[i]+h,y[i]+ky3*h,ky4,kx4);
+
+
+    x[i+1]:=x[i]+h*(1/6)*(kx1+2*kx2+2*kx3+kx4);
+    y[i+1]:=y[i]+h*(1/6)*(ky1+2*ky2+2*ky3+ky4);
+    z[i+1]:=z[i]+h*(1/6)*(ph1+2*ph2+2*ph3+ph4);
+  end;
+end;
+
+procedure TFormMain.Draw; //рисование функции
+var
+	i:integer;
+begin
+	Series1.Clear;//очистка серии
+  for i:=0 to n do
+    Series1.AddXY(t[i],y[i]);
+end;
+
+function Step(x:single):single;//вычисление степени 10 для ползунков
+begin
+  Result:=exp(x*2.302585);
+end;
+
+
+procedure TFormMain.Axis; //рисование осей
+begin
+	Series2.Clear;//очистка
+  Series2.AddXY(0,Ymax);
+  Series2.AddXY(0,0);
+  Series2.AddXY(Tm,0);
+end;
+
+procedure TFormMain.FormShow(Sender: TObject);
+begin
+  K:=500; //Задаем константы
+  T1:=1;
+  T2:=1;
+  Wo:=0.5;
+  Axis; //Рисуем оси
+  Calc; //считаем и
+  Draw; //рисуем график
+  ChartMain.LeftAxis.SetMinMax(0,20);//Оси не будут сдвигатся
+end;
+
+procedure TFormMain.TrackBarKChange(Sender: TObject);
+begin
+  K:=TrackBarK.Max-TrackBarK.Position+300;
+  EditK.Text:=FloatToStrF(K,ffFixed,4,0);
+  Calc;
+  Draw;
+end;
+
+procedure TFormMain.TrackBarT1Change(Sender: TObject);
+begin
+  T1:=Step(-TrackBarT1.Position*0.1);
+  EditT1.Text:=FloatToStrF(T1,ffFixed,3,2);
+  Calc;
+  Draw;
+end;
+
+procedure TFormMain.TrackBarT2Change(Sender: TObject);
+begin
+  T2:=Step(-TrackBarT2.Position*0.1);
+  EditT2.Text:=FloatToStrF(T2,ffFixed,3,2);
+  Calc;
+  Draw;
+end;
+
+procedure TFormMain.TrackBarOmegaChange(Sender: TObject);
+begin
+  Wo:=(TrackBarOmega.Max-TrackBarOmega.Position*0.01-99);
+  EditOmega.Text:=FloatToStrF(Wo,ffFixed,3,2);
+  Calc;
+  Draw;
+end;
+
+procedure TFormMain.mnuAboutClick(Sender: TObject);
+begin
+  Application.MessageBox('Программа решения диф. уравнения в графическом виде'+#13+#13+'Coded by Serge Ivanov'+#13+#13+'-Contacts-'+#13+'Email: serega.iv.1407@gmail.com', 'About Program');//Инфо о программе
+end;
+
+procedure TFormMain.mnuExitClick(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

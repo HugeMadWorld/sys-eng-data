@@ -1,0 +1,124 @@
+I 000048 55 1400          1505124449265 sm_arch
+(_unit VHDL (sm 0 26 (sm_arch 0 34 ))
+	(_version v98)
+	(_time 1505124449266 2017.09.11 13:07:29)
+	(_source (\./compile/sm.vhd\))
+	(_use (std(standard))(ieee(std_logic_1164))(ieee(std_logic_arith))(ieee(STD_LOGIC_UNSIGNED)))
+	(_code 595f5f5a040f0e4f09594a035c5e5a5f0d5e5a5f0d)
+	(_entity
+		(_time 1505124449235)
+		(_use (std(standard))(ieee(std_logic_1164))(ieee(std_logic_arith))(ieee(STD_LOGIC_UNSIGNED)))
+	)
+	(_object
+		(_port (_internal R ~extieee.std_logic_1164.STD_LOGIC 0 28 (_entity (_in ))))
+		(_port (_internal S ~extieee.std_logic_1164.STD_LOGIC 0 29 (_entity (_in ))))
+		(_port (_internal INV_U ~extieee.std_logic_1164.STD_LOGIC 0 30 (_entity (_out ))))
+		(_port (_internal U ~extieee.std_logic_1164.STD_LOGIC 0 31 (_entity (_out ))))
+		(_type (_internal Sreg0_type 0 37 (_enum1 s2 s1 (_to (i 0)(i 1)))))
+		(_signal (_internal Sreg0 Sreg0_type 0 42 (_architecture (_uni ))))
+		(_signal (_internal NextState_Sreg0 Sreg0_type 0 42 (_architecture (_uni ))))
+		(_process
+			(Sreg0_NextState(_architecture 0 0 55 (_process (_simple)(_target(2)(3)(5))(_sensitivity(0)(1)(4)))))
+			(Sreg0_CurrentState(_architecture 1 0 88 (_process (_simple)(_target(4))(_sensitivity(5)))))
+		)
+		(_subprogram
+			(_external resolved (ieee std_logic_1164 15))
+		)
+		(_type (_external ~extieee.std_logic_1164.STD_LOGIC (ieee std_logic_1164 STD_LOGIC)))
+	)
+	(_model . sm_arch 2 -1
+	)
+)
+I 000048 55 1400          1505124527909 sm_arch
+(_unit VHDL (sm 0 26 (sm_arch 0 34 ))
+	(_version v98)
+	(_time 1505124527910 2017.09.11 13:08:47)
+	(_source (\./compile/sm.vhd\))
+	(_use (std(standard))(ieee(std_logic_1164))(ieee(std_logic_arith))(ieee(STD_LOGIC_UNSIGNED)))
+	(_code 898a8287d4dfde9fd9899ad38c8e8a8fdd8e8a8fdd)
+	(_entity
+		(_time 1505124449234)
+		(_use (std(standard))(ieee(std_logic_1164))(ieee(std_logic_arith))(ieee(STD_LOGIC_UNSIGNED)))
+	)
+	(_object
+		(_port (_internal R ~extieee.std_logic_1164.STD_LOGIC 0 28 (_entity (_in ))))
+		(_port (_internal S ~extieee.std_logic_1164.STD_LOGIC 0 29 (_entity (_in ))))
+		(_port (_internal INV_U ~extieee.std_logic_1164.STD_LOGIC 0 30 (_entity (_out ))))
+		(_port (_internal U ~extieee.std_logic_1164.STD_LOGIC 0 31 (_entity (_out ))))
+		(_type (_internal Sreg0_type 0 37 (_enum1 s2 s1 (_to (i 0)(i 1)))))
+		(_signal (_internal Sreg0 Sreg0_type 0 42 (_architecture (_uni ))))
+		(_signal (_internal NextState_Sreg0 Sreg0_type 0 42 (_architecture (_uni ))))
+		(_process
+			(Sreg0_NextState(_architecture 0 0 55 (_process (_simple)(_target(2)(3)(5))(_sensitivity(0)(1)(4)))))
+			(Sreg0_CurrentState(_architecture 1 0 88 (_process (_simple)(_target(4))(_sensitivity(5)))))
+		)
+		(_subprogram
+			(_external resolved (ieee std_logic_1164 15))
+		)
+		(_type (_external ~extieee.std_logic_1164.STD_LOGIC (ieee std_logic_1164 STD_LOGIC)))
+	)
+	(_model . sm_arch 2 -1
+	)
+)
+I 000048 55 1400          1505125827768 sm_arch
+(_unit VHDL (sm 0 26 (sm_arch 0 34 ))
+	(_version v98)
+	(_time 1505125827769 2017.09.11 13:30:27)
+	(_source (\./compile/sm.vhd\))
+	(_use (std(standard))(ieee(std_logic_1164))(ieee(std_logic_arith))(ieee(STD_LOGIC_UNSIGNED)))
+	(_code 1d1b4b1a1d4b4a0b4d1d0e47181a1e1b491a1e1b49)
+	(_entity
+		(_time 1505124449234)
+		(_use (std(standard))(ieee(std_logic_1164))(ieee(std_logic_arith))(ieee(STD_LOGIC_UNSIGNED)))
+	)
+	(_object
+		(_port (_internal R ~extieee.std_logic_1164.STD_LOGIC 0 28 (_entity (_in ))))
+		(_port (_internal S ~extieee.std_logic_1164.STD_LOGIC 0 29 (_entity (_in ))))
+		(_port (_internal INV_U ~extieee.std_logic_1164.STD_LOGIC 0 30 (_entity (_out ))))
+		(_port (_internal U ~extieee.std_logic_1164.STD_LOGIC 0 31 (_entity (_out ))))
+		(_type (_internal Sreg0_type 0 37 (_enum1 s2 s1 (_to (i 0)(i 1)))))
+		(_signal (_internal Sreg0 Sreg0_type 0 42 (_architecture (_uni ))))
+		(_signal (_internal NextState_Sreg0 Sreg0_type 0 42 (_architecture (_uni ))))
+		(_process
+			(Sreg0_NextState(_architecture 0 0 55 (_process (_simple)(_target(2)(3)(5))(_sensitivity(0)(1)(4)))))
+			(Sreg0_CurrentState(_architecture 1 0 88 (_process (_simple)(_target(4))(_sensitivity(5)))))
+		)
+		(_subprogram
+			(_external resolved (ieee std_logic_1164 15))
+		)
+		(_type (_external ~extieee.std_logic_1164.STD_LOGIC (ieee std_logic_1164 STD_LOGIC)))
+	)
+	(_model . sm_arch 2 -1
+	)
+)
+V 000048 55 1400          1505125838237 sm_arch
+(_unit VHDL (sm 0 26 (sm_arch 0 34 ))
+	(_version v98)
+	(_time 1505125838238 2017.09.11 13:30:38)
+	(_source (\./compile/sm.vhd\))
+	(_use (std(standard))(ieee(std_logic_1164))(ieee(std_logic_arith))(ieee(STD_LOGIC_UNSIGNED)))
+	(_code 01020507545756175101125b040602075506020755)
+	(_entity
+		(_time 1505124449234)
+		(_use (std(standard))(ieee(std_logic_1164))(ieee(std_logic_arith))(ieee(STD_LOGIC_UNSIGNED)))
+	)
+	(_object
+		(_port (_internal R ~extieee.std_logic_1164.STD_LOGIC 0 28 (_entity (_in ))))
+		(_port (_internal S ~extieee.std_logic_1164.STD_LOGIC 0 29 (_entity (_in ))))
+		(_port (_internal INV_U ~extieee.std_logic_1164.STD_LOGIC 0 30 (_entity (_out ))))
+		(_port (_internal U ~extieee.std_logic_1164.STD_LOGIC 0 31 (_entity (_out ))))
+		(_type (_internal Sreg0_type 0 37 (_enum1 s2 s1 (_to (i 0)(i 1)))))
+		(_signal (_internal Sreg0 Sreg0_type 0 42 (_architecture (_uni ))))
+		(_signal (_internal NextState_Sreg0 Sreg0_type 0 42 (_architecture (_uni ))))
+		(_process
+			(Sreg0_NextState(_architecture 0 0 55 (_process (_simple)(_target(2)(3)(5))(_sensitivity(0)(1)(4)))))
+			(Sreg0_CurrentState(_architecture 1 0 88 (_process (_simple)(_target(4))(_sensitivity(5)))))
+		)
+		(_subprogram
+			(_external resolved (ieee std_logic_1164 15))
+		)
+		(_type (_external ~extieee.std_logic_1164.STD_LOGIC (ieee std_logic_1164 STD_LOGIC)))
+	)
+	(_model . sm_arch 2 -1
+	)
+)

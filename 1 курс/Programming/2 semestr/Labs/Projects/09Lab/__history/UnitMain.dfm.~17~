@@ -1,0 +1,441 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = #1043#1088#1072#1092#1080#1082#1080' '#1092#1091#1085#1082#1094#1080#1081
+  ClientHeight = 468
+  ClientWidth = 762
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = mnuMain
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 112
+    Top = 88
+    Width = 12
+    Height = 13
+    Caption = 'T1'
+  end
+  object Label2: TLabel
+    Left = 23
+    Top = 88
+    Width = 6
+    Height = 13
+    Caption = 'K'
+  end
+  object ImageMain: TImage
+    Left = 53
+    Top = 8
+    Width = 219
+    Height = 57
+    Picture.Data = {
+      0954506E67496D61676589504E470D0A1A0A0000000D49484452000000D40000
+      003B08020000008CAE3318000000017352474200AECE1CE90000000467414D41
+      0000B18F0BFC6105000000097048597300000EC300000EC301C76FA864000008
+      E14944415478DAED9C7B5055451CC7976AB4C99C1C4DA7B2E9618D393D0C751C
+      5F85A6A989D82820065DC41CB98288212A08840E822894829682176242414A91
+      713444297C236A8966EAA8E363C6EC311A8DA6D38C36462B3B2C8773F7ECD93D
+      E77016EFDDEF5F7A39AF3DFB39BFDFEEF9EEF9F934363602292911F291F04989
+      92844F4A98247C52C224E1931226095F9BE8EEDD3B7BF6D48D786768C70E1D44
+      5F0B9F6EDDBA71FCF8653FBF7E369C4BC2C72748554DE596AC556961B179CEA0
+      91C46D60FF15159547454F45E4C1FF3A7C076CBB7449EB985317E515A745D9D9
+      84C511E3977F5D03FFBDAEBCC6BD15152ED7C8D0D02E9D3BB7F59548F8388431
+      EAD6ADEF91133B5F7AF669E236CB1666272C4FC29D77FEF88157FAFB2566E4C6
+      391D8D776EBCE73BE8644343AF5EEFD71E2D3CB4B324C8114F24A0AD05AF6AE8
+      E8D9C456FC7EF5E2919FAF4D1C37A4ADAF41C2C7A7DD5B5CA382678EFA606165
+      719A7B4A4541C53F61EDDBFD7A2B77293EF91F8A6D6877D01CEDE0F62BE2E686
+      24A71239E655FEE288E825EBF7D79F539E9DB271F9F96788AD80CFCFEAA5C5F3
+      9744B7F59841C2C7219CB0B41225642BB3FCB2AA47711653E63B8408FC65F3FA
+      F2E0A9932DE96676F850081F9F5D408CB8D63E121449F83804F3114A9AB083FF
+      BDB417C530D03C72427FFDE2BB435A7D8F778739F7D88912FAA00A1270E1CCC9
+      FC959F57D6DE5CFBE5ACD215A91BBEFD01E6EEB4059A01891D3E4ACE05CD68CE
+      2FAF6289A06624E1E3104A9A089D87C1BD98B03167419F6D45394F75EF069AFA
+      FED3921B14AA70CED51DE42963E4C08070788ABFAF9E810347D01C32897BB1C3
+      47C9B9402F2E5A28091FAB943977E5EC8969F31202A2E3C60CE98FFE8AA29A6F
+      4C86D6BC15EF4E99AC10B747A4A2590BB0023E5DB67443B85592F0B10A27CD59
+      4949075DAEEEA323959103C141E978BCBBD66445258448EDCDC711A944F8106D
+      948310F33B3DE782E608CD38713123091FAB70F7F71E3EFCD153A76E3F314CD9
+      AFB0C34266AED1ED51C0907395A7C3A42A33BE565A678C7CF49C8B22EEA6A39D
+      7447A5E625E16315EA5A48434541D2B2C8409810554188D2A3787762CE550539
+      E5F68854DD59B672173A7C8C3997327EB050123E26E1D7CB8806D4CD1085E591
+      A3D1FB58F84B1D18A2D5617877AD9C0BE3DCACEC1DF84FC49CAB3B476681AFFD
+      E45C20E16314EA7E1CB7700A8653D1EA8D6B201014F860DC2A5AEA448333BCBD
+      6A1BB8FB6B1353707F63DAAAF7E53F06FE81A1E857D053779AA20B5FC3F53F3E
+      9BE3A0A454047D17C7027BEC3E8BE13363A8DB6969F30AE75C149CE0A5AADEB3
+      286D0CA5F0504F29151FF0688981C999155908089C641333727F3B5C8A5EEFC5
+      391DE844BA17A9059F6A7642DC0C5E6D6442A50DA33DA416F854B7093EE555FB
+      8B332604291D71D5B45FD50695A16E40B659DA960B0E950A371F4E9DFBA1817D
+      E1FD5CBAF53406178DBA54131A7B9A9098BC2A7BC5625DCAAD52ABC85757B575
+      A8FF24D0E43CBA52A6E3471C3E7CAA9132BC5F8E4505F8B9072443DD58FBEDB1
+      B42D9719A34C95735114B07FA9CBFABCFC8030FDF86AA15AC1E7FE3A00A700E5
+      68D79D33A2A16E40B659DA6D21F8E8F6786310AF1FAACAB97058367DF030986D
+      0217A46FCC48B0E73E586B31B38B0C1F4EA638C362F8E0CD4A8999F3716696F2
+      2E130D756377C11E4BBB2D646CCC4A5CF382C4F83ADAA420EE3FD69F15B2EEB5
+      157C784C8AE0834930D4E1BF6FDF79E58D28CD497F6EC4146584D37563D83D72
+      DB2CEDF620E52253214BFA844B133EDF977BC0DC1A123329C26F1C36856AB77F
+      557BA5936A584D37D4B93C72E22B5063269254FB570B7C2AE7FBF0E6C2C19367
+      DCBB7E0181825EA8A6676ECAC99DA70C572C2FC4D93D72DB2C6DA9F620327C4E
+      E75B2F0C085282F26E74F4409F2EEE93595D431DB079E44876BE5E9712AE16F8
+      9443103CCF570E81B55E4BD20D75C0EC915B6569FBF8F888BEAB5264A91C0D02
+      7C4A2C74D762E81AEA80D923D7CAE072CCE7A96A810FF5BDCA43C40EBAD6908E
+      6EA8031E8F5CE65C6F931A3ED5605F7769B82E7C8C1EB9CD963651F7FDA5E850
+      DD4F25A4AC520B7C2A8711B0BDF2D532D4F111183D729B2D6D7741FACBCA7647
+      4C0BF0018DF09A5F0C4EE67DF126D9E595D9552D74439DD123B7DFD2A60B3E09
+      17C0CB5CF09967D70B65163EBA2DC8E2910BB1B4E9AA70B9DEF49F60D8E233C0
+      AE77CA82F57C5A863A8B472ECAD2A6C8FCCA1A93EC7A8F2C808F68A8B378E402
+      2D6D2D9927EFC15D1566BF3C7319BDB1C250909BAB7FDE19E8FBAAE1F35A4B1E
+      7C384B5CB9719F6481265BBC2C2F8B1E4DDB5B392CA05711CB33E1335018EAE2
+      B9739DBA3E09C79D10A086DB8FBCDEE779DE939A675729B42C7C4AD8247849BA
+      DF5E186EB53DD2FA6AC933E1E32D0CA51C2418F34BB8D8E52A2785C4B2E4C2B6
+      7258BC4DD0B2C13C133EDB0A4321F1B26B003EE24AC7FABAEAF8A458B4E012AA
+      63C7AEA9EBF25222426C68B52515B13C133E2CAEC2501419A8194591B1C8E70C
+      4CDB50D3F2D925FE0ABDEAFBB25E3DBBA2170B6862F7D7B55FB85A2DAA229687
+      C3C75BA482286335A32832001FDCE5A1BE11B809F4BA415CAD165811CB93E1E3
+      2D0CC57228F69A5114F1C2074FF7CDDE2B4A1B0947F45D878EE14A59865B2DAA
+      229627C3C75B188A22F6F5B044995915065BB17DC74F11D30254D75F57B5352A
+      7C066C1D68FAC81A7366A0D5A22A6279327C96E45C240335A328628F7C90A44D
+      5BF6A8BEC3C71F5313F132D06A5115B13C193E4A6128DE1528066A46E91E4DB7
+      E7E045BA7F3443FC92DA64AB4555C4F258F82885A17857A018AB1945116339A9
+      DC82832AF28062AA81E128CD4977C42FC2C57A795B2DB0229667C2C752180A89
+      65058AB19A5114E9F65C7D5D75E18663983C64828F1D3B02B41ED295AD8E3F50
+      7DDFBA80BF2F59599218136CA0D5A22A62018F848FA5301496EE0A14C335A328
+      A2F79CFBF5AB722844F3A3096168AA01151E1E1B1B1F75EBE24103AD1658110B
+      78247CEC62590720AA66943DAD16DB3AEF858F71058A909A51B6B55A6CEBBC14
+      3EC61528426A46D9D66AE1ADF346F81857A008A919655BABAF9DDE25BC755E07
+      9FF9D5530FA2DA67ABBD0E3EA9F623099F943049F8A48449C227254C123E2961
+      FA1FF4600F30BA1E361F0000000049454E44AE426082}
+  end
+  object Label3: TLabel
+    Left = 53
+    Top = 112
+    Width = 18
+    Height = 13
+    Caption = '100'
+  end
+  object Label4: TLabel
+    Left = 53
+    Top = 188
+    Width = 12
+    Height = 13
+    Caption = '10'
+  end
+  object Label5: TLabel
+    Left = 53
+    Top = 263
+    Width = 6
+    Height = 13
+    Caption = '1'
+  end
+  object Label6: TLabel
+    Left = 53
+    Top = 339
+    Width = 16
+    Height = 13
+    Caption = '0,1'
+  end
+  object Label7: TLabel
+    Left = 53
+    Top = 415
+    Width = 22
+    Height = 13
+    Caption = '0,01'
+  end
+  object Label8: TLabel
+    Left = 145
+    Top = 112
+    Width = 18
+    Height = 13
+    Caption = '100'
+  end
+  object Label9: TLabel
+    Left = 145
+    Top = 188
+    Width = 12
+    Height = 13
+    Caption = '10'
+  end
+  object Label10: TLabel
+    Left = 145
+    Top = 263
+    Width = 6
+    Height = 13
+    Caption = '1'
+  end
+  object Label11: TLabel
+    Left = 145
+    Top = 339
+    Width = 16
+    Height = 13
+    Caption = '0,1'
+  end
+  object Label12: TLabel
+    Left = 145
+    Top = 415
+    Width = 22
+    Height = 13
+    Caption = '0,01'
+  end
+  object Label13: TLabel
+    Left = 200
+    Top = 88
+    Width = 12
+    Height = 13
+    Caption = 'T2'
+  end
+  object Label14: TLabel
+    Left = 233
+    Top = 112
+    Width = 18
+    Height = 13
+    Caption = '100'
+  end
+  object Label15: TLabel
+    Left = 233
+    Top = 188
+    Width = 12
+    Height = 13
+    Caption = '10'
+  end
+  object Label16: TLabel
+    Left = 233
+    Top = 263
+    Width = 6
+    Height = 13
+    Caption = '1'
+  end
+  object Label17: TLabel
+    Left = 233
+    Top = 339
+    Width = 16
+    Height = 13
+    Caption = '0,1'
+  end
+  object Label18: TLabel
+    Left = 233
+    Top = 415
+    Width = 22
+    Height = 13
+    Caption = '0,01'
+  end
+  object Label19: TLabel
+    Left = 303
+    Top = 112
+    Width = 18
+    Height = 13
+    Caption = '100'
+  end
+  object Label20: TLabel
+    Left = 303
+    Top = 188
+    Width = 12
+    Height = 13
+    Caption = '10'
+  end
+  object Label21: TLabel
+    Left = 303
+    Top = 263
+    Width = 6
+    Height = 13
+    Caption = '1'
+  end
+  object Label22: TLabel
+    Left = 303
+    Top = 339
+    Width = 16
+    Height = 13
+    Caption = '0,1'
+  end
+  object Label23: TLabel
+    Left = 303
+    Top = 415
+    Width = 22
+    Height = 13
+    Caption = '0,01'
+  end
+  object Label24: TLabel
+    Left = 272
+    Top = 88
+    Width = 13
+    Height = 13
+    Caption = 'Ksi'
+  end
+  object PageControlMain: TPageControl
+    Left = 321
+    Top = 0
+    Width = 445
+    Height = 452
+    ActivePage = TabSheetLACH
+    TabOrder = 1
+    OnChange = PageControlMainChange
+    object TabSheetLACH: TTabSheet
+      Caption = '   '#1051#1040#1063#1061'   '
+      ExplicitHeight = 428
+    end
+    object TabSheetLFCH: TTabSheet
+      Caption = '   '#1051#1060#1063#1061'   '
+      ImageIndex = 1
+      ExplicitWidth = 492
+      ExplicitHeight = 448
+    end
+    object TabSheetLAFCH: TTabSheet
+      Caption = '   '#1051#1040#1060#1063#1061'   '
+      ImageIndex = 2
+      ExplicitWidth = 492
+      ExplicitHeight = 448
+    end
+  end
+  object ChartMain: TChart
+    Left = 321
+    Top = 24
+    Width = 441
+    Height = 424
+    Legend.Visible = False
+    Title.Text.Strings = (
+      'TChart')
+    BottomAxis.Title.Caption = 'X'
+    LeftAxis.Title.Caption = 'Y'
+    Panning.MouseWheel = pmwNone
+    View3D = False
+    Zoom.Pen.Width = 2
+    TabOrder = 0
+    DefaultCanvas = 'TGDIPlusCanvas'
+    ColorPaletteIndex = 13
+    object Series1: TLineSeries
+      Title = #1057#1080#1089#1090#1077#1084#1072' '#1082#1086#1086#1088#1076#1080#1085#1072#1090
+      Brush.BackColor = clDefault
+      Pointer.InflateMargins = True
+      Pointer.Style = psRectangle
+      XValues.Name = 'X'
+      XValues.Order = loAscending
+      YValues.Name = 'Y'
+      YValues.Order = loNone
+    end
+    object Series2: TLineSeries
+      Title = #1043#1088#1072#1092#1080#1082
+      Brush.BackColor = clDefault
+      Pointer.InflateMargins = True
+      Pointer.Style = psRectangle
+      XValues.Name = 'X'
+      XValues.Order = loAscending
+      YValues.Name = 'Y'
+      YValues.Order = loNone
+    end
+  end
+  object TrackBarK: TTrackBar
+    Left = 8
+    Top = 107
+    Width = 41
+    Height = 326
+    Max = 20
+    Min = -20
+    Orientation = trVertical
+    ParentShowHint = False
+    Frequency = 10
+    ShowHint = False
+    TabOrder = 2
+    OnChange = TrackBarKChange
+  end
+  object TrackBarT1: TTrackBar
+    Left = 94
+    Top = 107
+    Width = 45
+    Height = 326
+    Max = 20
+    Min = -20
+    Orientation = trVertical
+    Frequency = 10
+    TabOrder = 3
+    OnChange = TrackBarT1Change
+  end
+  object EditK: TEdit
+    Left = 8
+    Top = 448
+    Width = 41
+    Height = 21
+    Alignment = taCenter
+    ReadOnly = True
+    TabOrder = 4
+    Text = '1,00'
+  end
+  object EditT1: TEdit
+    Left = 96
+    Top = 448
+    Width = 45
+    Height = 21
+    Alignment = taCenter
+    ReadOnly = True
+    TabOrder = 5
+    Text = '1,00'
+  end
+  object EditT2: TEdit
+    Left = 184
+    Top = 448
+    Width = 45
+    Height = 21
+    Alignment = taCenter
+    ReadOnly = True
+    TabOrder = 6
+    Text = '1,00'
+  end
+  object TrackBarT2: TTrackBar
+    Left = 184
+    Top = 107
+    Width = 43
+    Height = 326
+    Max = 20
+    Min = -20
+    Orientation = trVertical
+    Frequency = 10
+    TabOrder = 7
+    OnChange = TrackBarT2Change
+  end
+  object TrackBar1: TTrackBar
+    Left = 261
+    Top = 107
+    Width = 36
+    Height = 326
+    Max = 20
+    Min = -20
+    Orientation = trVertical
+    Frequency = 10
+    TabOrder = 8
+    OnChange = TrackBarT2Change
+  end
+  object EditKsi: TEdit
+    Left = 261
+    Top = 448
+    Width = 45
+    Height = 21
+    Alignment = taCenter
+    ReadOnly = True
+    TabOrder = 9
+    Text = '1,00'
+  end
+  object mnuMain: TMainMenu
+    Left = 708
+    Top = 424
+    object mnuFil: TMenuItem
+      Caption = #1060#1072#1081#1083
+      object mnuExit: TMenuItem
+        Caption = #1042#1099#1093#1086#1076
+        OnClick = mnuExitClick
+      end
+    end
+    object mnuHelp: TMenuItem
+      Caption = #1057#1087#1088#1072#1074#1082#1072
+      object mnuAbout: TMenuItem
+        Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
+        OnClick = mnuAboutClick
+      end
+    end
+  end
+end

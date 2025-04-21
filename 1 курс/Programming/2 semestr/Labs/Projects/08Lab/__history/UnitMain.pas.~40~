@@ -1,0 +1,170 @@
+unit UnitMain;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, TeEngine, Series, ExtCtrls, TeeProcs, Chart, StdCtrls,
+  Buttons, Menus, VclTee.TeeGDIPlus, Vcl.Samples.Spin;
+
+type
+  TFormMain = class(TForm)
+    Chart1: TChart;
+    slda: TTrackBar;
+    lbla: TLabel;
+    Series1: TLineSeries;
+    mnuBar: TMainMenu;
+    mnuFile: TMenuItem;
+    mnuExit: TMenuItem;
+    mnuHelp: TMenuItem;
+    mnuAbout: TMenuItem;
+    Series2: TLineSeries;
+    lblb: TLabel;
+    lbld: TLabel;
+    lblc: TLabel;
+    sldb: TTrackBar;
+    sldc: TTrackBar;
+    sldd: TTrackBar;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure sldaChange(Sender: TObject);
+    procedure mnuAboutClick(Sender: TObject);
+    procedure mnuExitClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure sldbChange(Sender: TObject);
+    procedure sldcChange(Sender: TObject);
+    procedure slddChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    procedure Draw;
+    procedure Axis;
+    procedure Calc;
+    { Public declarations }
+  end;
+
+var
+  FormMain: TFormMain;
+
+implementation
+
+{$R *.dfm}
+
+const n=1000; xmin=-10; xmax=10; ymin=-10; ymax=10;
+
+var a,b,c,d:single;   xg,yg: array [0..N] of single;  cb,cc:boolean;
+
+function F(x:single):single;
+begin
+  Result:=a*ln(b*x)+d;
+end;
+
+procedure TFormMain.FormCreate(Sender: TObject);
+begin
+  a:=1; b:=1; c:=0; d:=0;
+  Chart1.Title.Text.Text:='Graph';
+  Chart1.LeftAxis.SetMinMax(ymin,ymax) ;//оси не будут сдвигаться
+  Chart1.BottomAxis.SetMinMax(xmin,xmax);
+  Calc;//Cчитаем
+  Axis;//Рисуем оси
+  Draw;//Рисуем график
+end;
+
+Procedure TFormMain.Draw;
+var i:integer;
+begin
+  series1.Clear;//Очищаем график
+  For i:=1 to n do begin
+    if cb then Series1.Addxy(-xg[i]-c,yg[i])
+    else if cc then Series1.Addxy(xg[i]-c,yg[i])
+    else Series1.Addxy(xg[i],yg[i]);
+  end;
+end;
+
+procedure TFormMain.Calc;
+var i:integer; h:single;
+begin
+  h:=(xmax-xmin)/n;
+  For i:=1 to n do
+  begin
+    xg[i]:=i*h;
+    yg[i]:=F(xg[i]);
+  end;
+end;
+
+Procedure TFormMain.Axis;
+begin
+  series2.Addxy(xmin,0); //Координаты
+  series2.Addxy(0,0);
+  series2.Addxy(0,ymax);
+  series2.Addxy(0,ymin);
+  series2.Addxy(0,0);
+  series2.Addxy(xmax,0);
+end;
+procedure TFormMain.mnuAboutClick(Sender: TObject);
+begin
+  Application.MessageBox('Программа для показа графика y=a*ln(b*x+c)+d'+#13+#13+'Coded by Serge Ivanov'+#13+#13+'-Contacts-'+#13+'Email: serega.iv.1407@gmail.com', 'About Program');//Инфо о программе
+end;
+
+procedure TFormMain.mnuExitClick(Sender: TObject);
+begin
+  FormMain.Close;
+end;
+
+procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+var temp:word;
+begin
+  temp:=MessageBox(handle, PChar('Вы уверенны, что хотите выйти?'), PChar('Подтвердите действие'),(MB_YESNO+MB_ICONQUESTION+MB_APPLMODAL));//Окно подтверждения выхода
+  case temp of
+  idyes:CanClose:=true;//Выходим
+  idno:CanClose:=false;//Возвращаемся
+  end;
+end;
+
+procedure TFormMain.sldaChange(Sender: TObject);
+begin
+  a:=-slda.Position*0.1;//Привяжем трэкбар к графику
+  lbla.Caption:=FloatToStrF(a,fffixed,2,1);//Надпись показывает значение трэкбара
+  Calc;//Cчитаем
+  Draw;//Рисуем график
+end;
+
+procedure TFormMain.sldbChange(Sender: TObject);
+begin
+  b:=-sldb.Position*0.1;//Привяжем трэкбар к графику
+  lblb.Caption:=FloatToStrF(b,fffixed,2,1);//Надпись показывает значение трэкбара
+  if b=0 then series1.clear
+  else if b<0 then
+  begin
+    b:=-b;
+    cb:=true;
+    Calc;
+    Draw;
+  end
+  else begin
+    cb:=false;
+    Calc;//Cчитаем
+    Draw;//Рисуем график
+  end;
+end;
+
+procedure TFormMain.sldcChange(Sender: TObject);
+begin
+  c:=-sldc.Position*0.1;//Привяжем трэкбар к графику
+  lblc.Caption:=FloatToStrF(c,fffixed,2,1);//Надпись показывает значение трэкбара
+  cc:=true;
+  Calc;//Cчитаем
+  Draw;//Рисуем график
+end;
+
+procedure TFormMain.slddChange(Sender: TObject);
+begin
+  d:=-sldd.Position*0.1;//Привяжем трэкбар к графику
+  lbld.Caption:=FloatToStrF(d,fffixed,2,1);//Надпись показывает значение трэкбара
+  Calc;//Cчитаем
+  Draw;//Рисуем график
+end;
+
+end.

@@ -1,0 +1,214 @@
+/*
+ *  Laba3.asm
+ *
+ *  Created: 04.11.2020 12:35:33
+ *  Author: student
+ *	Тема: Интерфейсы передачи данных
+ *	*** Задание ***
+ *	Реализовать обмен данными между двумя устройствами со скоростью 19200 бит/с
+ *	
+ *	В передаваемый пакет входит:
+ *	Старт байт = 55h
+ *	Длина поля данных от 1 до 20 (число, байт данных)
+ *	Контрольная сумма(дополняет сумму остальных элементов пакета до 0) =>
+ *	=> Необходимо принять пакет - инвентировать побайтово и отправить обратно с тем же форматом пакета
+ *	
+ *	Тактовая частота МК 8 МГц
+ *	*** *** *** ***
+ */ 
+ ;RXCIE TXCIE UDRIE RXEN TXEN UCSZ2 RXB8 TXB8 UCSRB
+ .include "m16def.inc"
+ .def temp = R16
+ .def cnt_bytes = R17
+ .def chck_sum = R18
+ .def chck_sum_pos = R19; позиция байта контрольной суммы
+ .def data_length = R20; количество байт данных
+ .def check_all_transmitted = R21;
+  
+ jmp RESET ; Reset Handler
+ jmp EXT_INT0 ; IRQ0 Handler
+ jmp EXT_INT1 ; IRQ1 Handler
+ jmp TIM2_COMP ; Timer2 Compare Handler
+ jmp TIM2_OVF ; Timer2 Overflow Handler
+ jmp TIM1_CAPT ; Timer1 Capture Handler
+ jmp TIM1_COMPA ; Timer1 CompareA Handler
+ jmp TIM1_COMPB ; Timer1 CompareB Handler
+ jmp TIM1_OVF ; Timer1 Overflow Handler
+ jmp TIM0_OVF ; Timer0 Overflow Handler
+ jmp SPI_STC ; SPI Transfer Complete Handler
+ jmp USART_RXC ; USART RX Complete Handler
+ jmp USART_UDRE ; UDR Empty Handler
+ jmp USART_TXC ; USART TX Complete Handler
+ jmp ADC_C ; ADC Conversion Complete Handler
+ jmp EE_RDY ; EEPROM Ready Handler
+ jmp ANA_COMP ; Analog Comparator Handler
+ jmp TWSI ; Two-wire Serial Interface Handler
+ jmp EXT_INT2 ; IRQ2 Handler
+ jmp TIM0_COMP ; Timer0 Compare Handler
+ jmp SPM_RDY ; Store Program Memory Ready Handler
+;
+
+ RESET: 
+ ldi temp,high(RAMEND) ; Main program start
+ out SPH,temp ; Set Stack Pointer to top of RAM
+ ldi temp,low(RAMEND)
+ out SPL,temp
+
+ ;скорость 19200 бит в сек при 8мгц
+ ldi temp,0
+ out UBRRH,temp
+ ldi temp,25
+ out UBRRL,temp
+ ; настройка на прием в ассинхроном режиме 8 бит данных 
+ ldi temp,(1<<URSEL)|(1<<UCSZ1)|(1<<UCSZ0)
+ out UCSRC,temp
+ 
+ ldi temp,(1<<RXCIE)|(1<<RXEN)|(0<<UCSZ2) ;прерывание по приему и приемник
+ out UCSRB,temp
+
+ clr cnt_bytes ;очищаем счетчик принятых байт
+ 
+ sei ; Enable interrupts
+
+ LOOP: 
+ in temp, UCSRA
+ sbrc temp, RXC ; 
+ call USART_RXC
+ in temp, UCSRA
+ sbrc temp, TXC ; 
+ call USART_TXC ; 
+ rjmp LOOP
+
+ ADC_C: ; ADC Conversion Complete Handler
+ TIM1_COMPA: ; Timer1 CompareA Handler
+ EXT_INT0: ; IRQ0 Handler
+ EXT_INT1: ; IRQ1 Handler
+ TIM2_COMP: ; Timer2 Compare Handler
+ TIM2_OVF: ; Timer2 Overflow Handler
+ TIM1_CAPT: ; Timer1 Capture Handler
+ TIM1_COMPB: ; Timer1 CompareB Handler
+ TIM1_OVF: ; Timer1 Overflow Handler
+ TIM0_OVF: ; Timer0 Overflow Handler
+ SPI_STC: ; SPI Transfer Complete Handler
+ 
+ USART_UDRE: ; UDR Empty Handler
+
+
+ EE_RDY: ; EEPROM Ready Handler
+ ANA_COMP: ; Analog Comparator Handler
+ TWSI: ; Two-wire Serial Interface Handler
+ EXT_INT2: ; IRQ2 Handler
+ TIM0_COMP: ; Timer0 Compare Handler
+ SPM_RDY:; Store Program Memory Ready Handler
+ reti
+
+ USART_RXC: ; USART RX Complete Handler
+ in temp,UDR ;получение данных от приемника
+ cpi cnt_bytes,0
+ breq check_start_byte
+ cpi cnt_bytes,1
+ breq check_data_length
+ cp cnt_bytes,chck_sum_pos; проверка принятия последнего байта в пакете
+ breq check_chck_sum
+ st X+,temp ;сохранение байтов данных
+ inc cnt_bytes
+ add chck_sum,temp; учли принятый байт в контр сумме
+ reti
+
+ check_start_byte:
+ cpi temp,0x55
+ brne not_start_byte
+ inc cnt_bytes
+ ldi  chck_sum,0x55;заносим в контр суму первое значение 55h
+ not_start_byte:
+ reti
+
+ check_data_length:
+ cpi temp,1
+ brlo Error
+ cpi temp,21
+ brsh Error
+ mov data_length, temp ; занесли кол-во байт в data_length
+ ldi XL,LOW(Data_buffer)
+ ldi XH,HIGH(Data_buffer)
+ inc cnt_bytes
+ add chck_sum,temp; учли принятый байт в контр сумме
+ ldi chck_sum_pos,2
+ add chck_sum_pos,temp; вычислили позицию байта контрольной суммы по формлуе (длина+2)
+ reti
+
+ Error:
+ clr cnt_bytes ;для возвращения к началу приема
+ reti
+
+ check_chck_sum:
+ add chck_sum,temp; учли принятый байт в контрольной сумме
+ cpi  chck_sum,0
+ breq transform_packet
+ clr cnt_bytes
+ reti
+
+ transform_packet: ;цикл обработки данных (инвентируем принятые данные и возвращаем)
+ ldi XL,LOW(Data_buffer)
+ ldi XH,HIGH(Data_buffer) ;теперь Х адрес начало буффера
+ mov cnt_bytes, Data_length ;
+ invert:
+ ld temp, X ;загружаем в темп значение из ячейки памяти на которую ссылается указатель Х
+ com temp ;инвентируем значение (всех восьми битов по-битно)
+ st X+, temp; сохраняем в буффер обратно, а также инкрементируем указатель
+ dec cnt_bytes ; уменьшили значение счетчика с последующей проверкой 
+ brne invert ; не 0 - зацикливаемся, 0 - выходим из цикла
+ ldi temp,(1<<TXCIE)|(1<<TXEN)|(0<<UCSZ2);
+ out UCSRB,temp;переключаемся в режим передачи
+ ldi temp,0x55;стартовый байт
+ out UDR,temp;отправляем на UDR
+ mov chck_sum, temp;подготавливаем для подсчета отправленных байтов (контрол суммы отпр пакета)
+ clr cnt_bytes ;на всякий случай
+ clr check_all_transmitted; сброс признака передачи всего пакета
+ reti
+
+ USART_TXC: ; USART TX Complete Handler
+ ;прерывание по окончанию передачи байта
+ inc cnt_bytes;
+ cpi cnt_bytes,1;сравниваем с 1 и переходим
+ breq send_length
+ ;если не 1 - сюда
+ cp cnt_bytes,chck_sum_pos; проверка отправки последнего байта в пакете 
+ breq  send_chck_sum
+ cpi check_all_transmitted, 0;проверка передан ли весь пакет
+ brne stop_transmiting 
+ ;если не breq send_length и не breq  send_chck_sum и не все передано, то ниже
+ ;передаем данные
+
+ ld temp, X+;извлекаем данные из буффера с последующим инкрементов указателя
+ out UDR,temp;отправляем данные
+ add chck_sum, temp ;для учета в контрольной сумме
+ reti
+
+ stop_transmiting:;перестройка приема передачи
+ ldi temp,(1<<RXCIE)|(1<<RXEN)|(0<<UCSZ2) ;прерывание по приему и приемник
+ out UCSRB,temp
+ clr cnt_bytes
+ reti 
+
+ send_length:
+ ldi XL,LOW(Data_buffer)
+ ldi XH,HIGH(Data_buffer)
+ out UDR,data_length; передаем длину поля данных
+ add chck_sum, data_length; учет в контрольной сумме
+ ;end
+ reti
+
+ send_chck_sum:
+ ;накопили сумму и надо '0 - сумма'
+ ;clr temp
+ ;sub temp, chck_sum ;результат в темпе
+ NEG chck_sum ;Two’s Complement Rd < $00 ? Rd;результат в chck_sum
+ out UDR,chck_sum
+ set check_all_transmitted
+ reti
+
+ .dseg
+ 
+ Data_buffer: ;принятые данные
+ .byte 20
